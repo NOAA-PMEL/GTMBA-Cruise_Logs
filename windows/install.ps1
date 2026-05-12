@@ -237,7 +237,8 @@ if ($Response -eq "yes") {
         # Main Form Shortcut
         Write-Info "Creating 'Cruise Logs - Main Form' shortcut..."
         $LnkPath = "$DesktopPath\Cruise Logs - Main Form.lnk"
-        $Target = "$CondaPath\Scripts\streamlit.exe"
+        # Use the cruise_logs environment's streamlit/python to ensure correct packages
+        $Target = "$CondaPath\envs\cruise_logs\Scripts\streamlit.exe"
         $Arguments = "run `"$InstallPath\cruise_form.py`""
 
         $Link = $ShellLink.CreateShortcut($LnkPath)
@@ -250,7 +251,7 @@ if ($Response -eq "yes") {
         # Launcher Shortcut
         Write-Info "Creating 'Cruise Logs - Launcher' shortcut..."
         $LnkPath = "$DesktopPath\Cruise Logs - Launcher.lnk"
-        $Target = "$CondaPath\pythonw.exe"
+        $Target = "$CondaPath\envs\cruise_logs\pythonw.exe"
         $Arguments = "`"$InstallPath\launcher.py`""
 
         $Link = $ShellLink.CreateShortcut($LnkPath)
