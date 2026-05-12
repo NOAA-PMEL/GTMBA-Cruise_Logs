@@ -131,7 +131,7 @@ if (Test-Path $InstallPath) {
 
 if (-not (Test-Path $InstallPath)) {
     Write-Info "Cloning repository..."
-    & git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git $InstallPath
+    & git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git $InstallPath
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Repository cloned successfully"
     } else {
