@@ -48,13 +48,13 @@ git lfs version
 cd ~/Github
 
 # Clone the repository
-git clone git@github.com:blake1237/Cruise_Logs.git
+git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
 
 # Or use HTTPS if SSH is not configured:
-git clone https://github.com/blake1237/Cruise_Logs.git
+git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 
 # Navigate into the directory
-cd Cruise_Logs
+cd GTMBA-Cruise_Logs
 
 # Pull LFS files (important!)
 git lfs pull

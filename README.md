@@ -34,8 +34,8 @@ All data is stored in a SQLite database (`Cruise_Logs.db`) with Git LFS support 
 ```bash
 # Clone repository
 cd ~/Github
-git clone git@github.com:blake1237/Cruise_Logs.git
-cd Cruise_Logs
+git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+cd GTMBA-Cruise_Logs
 
 # Install dependencies
 pip install -r requirements.txt
@@ -49,8 +49,8 @@ streamlit run cruise_form.py
 ```cmd
 # Clone repository
 cd C:\
-git clone git@github.com:blake1237/Cruise_Logs.git
-cd Cruise_Logs
+git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+cd GTMBA-Cruise_Logs
 
 # Create conda environment
 conda create -n cruise_logs python=3.11 -y
@@ -226,8 +226,8 @@ Cruise_Logs/
 
 ```bash
 # Clone the repository
-git clone git@github.com:blake1237/Cruise_Logs.git
-cd Cruise_Logs
+git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+cd GTMBA-Cruise_Logs
 
 # Pull database file
 git lfs pull
@@ -456,7 +456,7 @@ git push
 
 ## Support & Contact
 
-- **Repository:** https://github.com/blake1237/Cruise_Logs
+- **Repository:** https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs
 - **Issues:** Create GitHub issue for bugs or feature requests
 - **Documentation:** See README files in repository
 

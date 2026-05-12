@@ -75,8 +75,8 @@ Cruise_Logs/
 **Quick Start:**
 ```bash
 cd ~/Github
-git clone git@github.com:blake1237/Cruise_Logs.git
-cd Cruise_Logs
+git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+cd GTMBA-Cruise_Logs
 # Follow macos/SETUP_MACOS.md
 ```
 
@@ -101,8 +101,8 @@ cd Cruise_Logs
 **Quick Start:**
 ```cmd
 cd C:\
-git clone git@github.com:blake1237/Cruise_Logs.git
-cd Cruise_Logs
+git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+cd GTMBA-Cruise_Logs
 # Follow windows/SETUP_WINDOWS.md
 ```
 
@@ -299,4 +299,4 @@ Cruise_Logs/
 ---
 
 **Last Updated:** January 2025  
-**Repository:** https://github.com/blake1237/Cruise_Logs
+**Repository:** https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs

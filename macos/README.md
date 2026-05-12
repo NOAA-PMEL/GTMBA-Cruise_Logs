@@ -29,8 +29,8 @@ git lfs install
 
 # Clone repository
 cd ~/Github
-git clone git@github.com:blake1237/Cruise_Logs.git
-cd Cruise_Logs
+git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+cd GTMBA-Cruise_Logs
 git lfs pull
 
 # Create conda environment
