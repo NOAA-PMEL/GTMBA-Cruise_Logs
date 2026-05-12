@@ -6,7 +6,7 @@ This guide will help you set up the Cruise_Logs repository on a macOS system.
 
 - **macOS** 10.15 (Catalina) or later
 - **Homebrew** package manager (recommended)
-- **Git** with Git LFS support
+- **Git**
 - **Python** 3.9 or higher (Anaconda recommended, or system Python with venv)
 - **GitHub account** with repository access
 
@@ -24,21 +24,14 @@ Homebrew is the recommended package manager for macOS.
 brew --version
 ```
 
-### 2. Install Git and Git LFS
+### 2. Install Git
 
 ```bash
 # Install Git (if not already installed)
 brew install git
 
-# Install Git LFS for large file handling
-brew install git-lfs
-
-# Initialize Git LFS
-git lfs install
-
-# Verify installations
+# Verify installation
 git --version
-git lfs version
 ```
 
 ### 3. Clone the Repository
@@ -55,9 +48,6 @@ git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 
 # Navigate into the directory
 cd GTMBA-Cruise_Logs
-
-# Pull LFS files (important!)
-git lfs pull
 ```
 
 ### 4. Set Up Python Environment
@@ -107,8 +97,6 @@ pip install -r requirements.txt
 ls -lh Cruise_Logs.db
 
 # Should be several MB, not just a few KB
-# If it's tiny, pull LFS files:
-git lfs pull
 ```
 
 ### 6. Configure Paths
@@ -359,13 +347,6 @@ conda activate cruise_logs
 # or: source venv/bin/activate
 ```
 
-### Issue: Database file is only a few KB
-
-**Solution:** Git LFS pointer file
-```bash
-git lfs pull
-```
-
 ### Issue: Permission denied on database
 
 **Solution:** Check file permissions
@@ -438,9 +419,6 @@ cd ~/Github/Cruise_Logs
 
 # Pull latest code
 git pull origin main
-
-# Pull LFS files
-git lfs pull
 
 # Update packages if needed
 pip install --upgrade -r requirements.txt
@@ -575,7 +553,7 @@ python import_nylon_inventory.py
 sqlite3 Cruise_Logs.db ".tables"
 
 # Update repository
-git pull && git lfs pull
+git pull
 ```
 
 ## Additional Resources
@@ -592,7 +570,7 @@ git pull && git lfs pull
 |-----------|-------------|
 | macOS | 10.15 (Catalina) or later |
 | Python | 3.9+ (3.11 recommended) |
-| Git | Latest version with LFS |
+| Git | Latest version |
 | Disk Space | ~100 MB for database + code |
 | RAM | 2 GB minimum, 4 GB recommended |
 | Browser | Safari, Chrome, Firefox, Edge |

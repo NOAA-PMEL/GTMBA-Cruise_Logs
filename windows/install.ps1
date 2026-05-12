@@ -115,27 +115,7 @@ if (-not $GitFound) {
 Write-Host ""
 
 # ============================================================================
-# STEP 3: Check for Git LFS
-# ============================================================================
-Write-Info "STEP 3: Checking for Git LFS..."
-Write-Host ""
-
-try {
-    $GitLFSVersion = & git lfs version 2>$null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Success "Git LFS is installed"
-    } else {
-        Write-Warning "Git LFS not detected, attempting to install..."
-        & git lfs install 2>$null
-    }
-} catch {
-    Write-Warning "Could not verify Git LFS"
-}
-
-Write-Host ""
-
-# ============================================================================
-# STEP 4: Clone Repository
+# STEP 3: Clone Repository
 # ============================================================================
 Write-Info "STEP 4: Cloning Repository..."
 Write-Host ""
@@ -160,16 +140,12 @@ if (-not (Test-Path $InstallPath)) {
     }
 }
 
-Write-Info "Pulling database file..."
-Push-Location $InstallPath
-& git lfs pull 2>$null
-Pop-Location
-Write-Success "Database pulled"
+Write-Info "Repository cloned successfully"
 
 Write-Host ""
 
 # ============================================================================
-# STEP 5: Create Conda Environment
+# STEP 4: Create Conda Environment
 # ============================================================================
 Write-Info "STEP 5: Creating Conda Environment..."
 Write-Host ""
@@ -188,7 +164,7 @@ if ($LASTEXITCODE -eq 0) {
 Write-Host ""
 
 # ============================================================================
-# STEP 6: Install Python Packages
+# STEP 5: Install Python Packages
 # ============================================================================
 Write-Info "STEP 6: Installing Python Packages..."
 Write-Host ""
@@ -212,7 +188,7 @@ if (Test-Path "$InstallPath\requirements.txt") {
 Write-Host ""
 
 # ============================================================================
-# STEP 7: Verify Installation
+# STEP 6: Verify Installation
 # ============================================================================
 Write-Info "STEP 7: Verifying Installation..."
 Write-Host ""
@@ -225,7 +201,7 @@ if (Test-Path "Cruise_Logs.db") {
     if ($DbSize -gt 1) {
         Write-Success "Database file OK ($([math]::Round($DbSize, 2)) MB)"
     } else {
-        Write-Warning "Database file is small (might need git lfs pull)"
+        Write-Warning "Database file is small (may be corrupted)"
     }
 } else {
     Write-Warning "Database file not found"
@@ -245,7 +221,7 @@ Pop-Location
 Write-Host ""
 
 # ============================================================================
-# STEP 8: Create Desktop Shortcuts
+# STEP 7: Create Desktop Shortcuts
 # ============================================================================
 Write-Info "STEP 8: Creating Desktop Shortcuts..."
 Write-Host ""

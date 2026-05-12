@@ -14,7 +14,7 @@ This directory contains macOS-specific documentation and configuration files for
 ### 1. Prerequisites
 - macOS 10.15 (Catalina) or later
 - Homebrew package manager (recommended)
-- Git with Git LFS support
+- Git
 - Python 3.9+ (Anaconda or venv)
 
 ### 2. Installation Steps
@@ -23,15 +23,13 @@ This directory contains macOS-specific documentation and configuration files for
 # Install Homebrew (if needed)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install Git and Git LFS
-brew install git git-lfs
-git lfs install
+# Install Git
+brew install git
 
 # Clone repository
 cd ~/Github
 git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
-git lfs pull
 
 # Create conda environment
 conda create -n cruise_logs python=3.11 -y
@@ -52,7 +50,7 @@ streamlit run cruise_form.py
 ### SETUP_MACOS.md
 Complete macOS setup guide including:
 - Homebrew installation
-- Git and Git LFS setup
+- Git setup
 - Python environment (Anaconda or venv)
 - Database configuration
 - Terminal aliases and shortcuts
@@ -131,7 +129,7 @@ python verify_setup.py
 This checks:
 - Python version (3.9+)
 - Required packages (streamlit, pandas, etc.)
-- Database file (proper LFS download)
+- Database file
 - Application files
 - Git configuration
 
@@ -175,11 +173,6 @@ export PATH="/usr/local/anaconda3/bin:$PATH"
 source ~/.zshrc
 ```
 
-### Git LFS file is pointer (tiny file)
-```bash
-git lfs pull
-```
-
 ### Port already in use
 ```bash
 # Streamlit auto-selects next port, or:
@@ -202,7 +195,6 @@ In parent directory:
 - `../config.py` - Cross-platform configuration
 - `../verify_setup.py` - Setup verification script
 - `../.gitignore` - Git ignore rules
-- `../.gitattributes` - Git LFS configuration
 
 ## ✅ Success Criteria
 

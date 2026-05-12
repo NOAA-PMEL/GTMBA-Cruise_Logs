@@ -12,9 +12,9 @@ Cruise_Logs/
 ├── 📄 config.py                        # Cross-platform configuration module
 ├── 📄 verify_setup.py                  # Setup verification script (all platforms)
 ├── 📄 .gitignore                       # Git ignore rules
-├── 📄 .gitattributes                   # Git LFS configuration
+├── 📄 .gitattributes                   # Git attributes configuration
 │
-├── 🗄️ Cruise_Logs.db                   # SQLite database (Git LFS tracked)
+├── 🗄️ Cruise_Logs.db                   # SQLite database
 ├── 📊 Equipment.xls                    # Acoustic releases data
 ├── 📊 NYLON LENGTHS_MostRecent.xls     # Nylon spools data
 │
@@ -66,7 +66,7 @@ Cruise_Logs/
 
 **Key Topics:**
 - Homebrew installation
-- Git and Git LFS setup
+- Git setup
 - Anaconda or venv configuration
 - Terminal aliases and shortcuts
 - Automator app creation
@@ -92,7 +92,7 @@ cd GTMBA-Cruise_Logs
 
 **Key Topics:**
 - Anaconda installation on Windows
-- Git and Git LFS setup for Windows
+- Git setup for Windows
 - Path configuration for `C:\Cruise_Logs`
 - Desktop shortcuts
 - Batch file usage
@@ -161,7 +161,7 @@ These files work on **both** macOS and Windows:
 
 | Category | Files | Purpose |
 |----------|-------|---------|
-| **Database** | `Cruise_Logs.db` | Main SQLite database (Git LFS) |
+| **Database** | `Cruise_Logs.db` | Main SQLite database |
 | **Data Sources** | `Equipment.xls`, `NYLON LENGTHS_MostRecent.xls` | Excel inventory data |
 | **Forms** | `cruise_form.py`, `dep_form_JSON.py`, etc. | Streamlit web forms |
 | **Search** | `*_inventory_search.py` | Inventory search applications |
@@ -169,7 +169,7 @@ These files work on **both** macOS and Windows:
 | **Config** | `config.py`, `requirements.txt` | Configuration files |
 | **Verification** | `verify_setup.py` | Setup checker |
 | **Sync** | `db_sync2.py` | Remote database sync |
-| **Git** | `.gitignore`, `.gitattributes` | Git configuration |
+| **Git** | `.gitignore` | Git configuration |
 
 ### macOS Directory
 
@@ -211,8 +211,7 @@ These files work on **both** macOS and Windows:
 
 ### Updating Repository (Any Platform)
 1. `git pull origin main`
-2. `git lfs pull`
-3. `pip install --upgrade -r requirements.txt`
+2. `pip install --upgrade -r requirements.txt`
 
 ## 🔍 Finding What You Need
 
@@ -248,7 +247,7 @@ These files work on **both** macOS and Windows:
 - ✅ `requirements.txt`
 - ✅ `config.py`
 - ✅ `.gitignore`, `.gitattributes`
-- ✅ `Cruise_Logs.db` (via Git LFS)
+- ✅ `Cruise_Logs.db`
 - ✅ Excel files (`.xls`)
 - ✅ Conda environment files (`.yml`)
 - ✅ Batch files (`.bat`)
@@ -268,8 +267,7 @@ These files work on **both** macOS and Windows:
 2. **Run verify_setup.py** - After installation and when troubleshooting
 3. **Use config.py** - When writing new code, import from `config.py`
 4. **Keep environments separate** - Use dedicated conda environment
-5. **Git LFS** - Always run `git lfs pull` after cloning or pulling
-6. **Read the README** - Each directory has a README with quick reference
+5. **Read the README** - Each directory has a README with quick reference
 
 ## 🔄 Future Expansion
 

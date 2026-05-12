@@ -144,11 +144,10 @@ def check_database():
         size_mb = size_bytes / (1024 * 1024)
         print(f"  Database size: {size_mb:.2f} MB")
 
-        # Check if it's a Git LFS pointer file (very small)
-        is_lfs_pointer = size_bytes < 1024  # Less than 1KB is likely a pointer
-        if is_lfs_pointer:
+        # Check if database is a reasonable size
+        if size_bytes < 1024:
             print_check("Database downloaded", False,
-                       "File is Git LFS pointer - run: git lfs pull")
+                       "File is too small - may be corrupted")
         else:
             print_check("Database downloaded", True, "Full database file present")
 
@@ -232,7 +231,6 @@ def check_configuration_files():
         "requirements.txt": "Python package list",
         "environment_windows.yml": "Conda environment file",
         ".gitignore": "Git ignore file",
-        ".gitattributes": "Git LFS configuration",
         "SETUP_WINDOWS.md": "Setup documentation",
     }
 
@@ -243,19 +241,14 @@ def check_configuration_files():
 
     return True  # Not critical
 
-def check_git_lfs():
-    """Check if Git LFS is configured."""
+def check_git_config():
+    """Check if Git is configured."""
     print_header("Git Configuration")
 
     # Check if .git directory exists
     is_git_repo = Path(".git").exists()
     print_check("Git repository", is_git_repo,
                 "Initialized" if is_git_repo else "Not a git repository")
-
-    # Check for .gitattributes
-    has_gitattributes = Path(".gitattributes").exists()
-    print_check("Git LFS configured", has_gitattributes,
-                "Found .gitattributes" if has_gitattributes else "Missing .gitattributes")
 
     return True  # Not critical
 
@@ -320,7 +313,7 @@ def main():
     checks.append(("Excel Files", check_excel_files()))
     checks.append(("Python Files", check_python_files()))
     checks.append(("Configuration Files", check_configuration_files()))
-    checks.append(("Git Configuration", check_git_lfs()))
+    checks.append(("Git Configuration", check_git_config()))
 
     # Count passed checks
     checks_passed = sum(1 for _, passed in checks if passed)

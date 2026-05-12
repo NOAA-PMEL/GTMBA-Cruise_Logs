@@ -14,7 +14,7 @@ The Cruise Logs system provides Streamlit-based web forms and search interfaces 
 - **Release Inventory** - 569 acoustic release instruments
 - **Nylon Inventory** - 1,723+ nylon spool records
 
-All data is stored in a SQLite database (`Cruise_Logs.db`) with Git LFS support for version control.
+All data is stored in a SQLite database (`Cruise_Logs.db`) for version control.
 
 ## Features
 
@@ -68,7 +68,7 @@ See **[SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)** for detailed Windows instal
 ## System Requirements
 
 - **Python** 3.9 or higher (3.11 recommended)
-- **Git** with Git LFS support
+- **Git**
 - **Anaconda** (recommended for Windows)
 
 ### Python Packages
@@ -123,7 +123,7 @@ conda env create -f windows/environment_windows.yml
 
 ## Database
 
-**File:** `Cruise_Logs.db` (SQLite database, managed by Git LFS)
+**File:** `Cruise_Logs.db` (SQLite database)
 
 ### Tables
 
@@ -181,7 +181,7 @@ SELECT * FROM deployment;
 
 ```
 Cruise_Logs/
-├── Cruise_Logs.db              # SQLite database (Git LFS)
+├── Cruise_Logs.db              # SQLite database
 ├── Equipment.xls               # Acoustic releases source data
 ├── NYLON LENGTHS_MostRecent.xls # Nylon spools source data
 │
@@ -202,7 +202,6 @@ Cruise_Logs/
 │
 ├── requirements.txt            # Python dependencies
 ├── .gitignore                  # Git ignore rules
-├── .gitattributes              # Git LFS configuration
 │
 ├── macos/                      # macOS-specific files
 │   ├── SETUP_MACOS.md          # macOS setup guide
@@ -229,9 +228,6 @@ Cruise_Logs/
 git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
 
-# Pull database file
-git lfs pull
-
 # Install packages
 pip install -r requirements.txt
 
@@ -247,7 +243,7 @@ streamlit run cruise_form.py
 Follow the comprehensive guide in **[windows/SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)**:
 
 1. Install Anaconda (full installation)
-2. Install Git with Git LFS
+2. Install Git
 3. Clone repository to `C:\Cruise_Logs`
 4. Create conda environment
 5. Update database paths in Python files
@@ -259,7 +255,6 @@ Follow the comprehensive guide in **[windows/SETUP_WINDOWS.md](windows/SETUP_WIN
 See **[windows/GITHUB_SETUP.md](windows/GITHUB_SETUP.md)** for instructions on:
 
 - Creating a new repository
-- Setting up Git LFS
 - Configuring SSH keys
 - Managing branches
 - Syncing between machines
@@ -341,15 +336,11 @@ This checks:
 - Database file
 - Excel files
 - Application files
-- Git LFS configuration
 
 ### Common Issues
 
 **Database not found:**
 ```bash
-# Pull LFS files
-git lfs pull
-
 # Verify database exists
 ls -lh Cruise_Logs.db
 ```
@@ -447,7 +438,7 @@ sqlite3 Cruise_Logs.db "SELECT * FROM deployment" > deployments.csv
 
 ### Git Backups
 
-The database is tracked in Git with LFS:
+The database is tracked in Git:
 ```bash
 git add Cruise_Logs.db
 git commit -m "Database backup"
