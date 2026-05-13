@@ -2,6 +2,7 @@
 """
 Cruise Logs Application Launcher
 A modern GUI launcher for Cruise_Logs Streamlit applications
+Version: 2.0.1 (2025-05-14) - Using functools.partial for button bindings
 """
 
 import customtkinter as ctk
@@ -31,7 +32,7 @@ class CruiseLogsLauncher(ctk.CTk):
         super().__init__()
 
         # Configure window
-        self.title("Cruise Logs - Application Launcher")
+        self.title("Cruise Logs - Application Launcher v2.0.1")
         self.geometry("1000x750")
 
         # Center window on screen
@@ -247,6 +248,10 @@ class CruiseLogsLauncher(ctk.CTk):
         """Launch a Streamlit application"""
         app_name = app['name']
         app_file = app['file']
+
+        # Debug output
+        print(f"DEBUG: Launching app: {app_name} -> {app_file}")
+        print(f"DEBUG: Full app dict: {app}")
 
         # Check if file exists
         if not os.path.exists(app_file):
