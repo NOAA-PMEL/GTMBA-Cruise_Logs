@@ -10,6 +10,7 @@ import sys
 import os
 import threading
 from pathlib import Path
+from functools import partial
 
 # Windows-specific subprocess flag to hide console windows
 if sys.platform == 'win32':
@@ -179,7 +180,7 @@ class CruiseLogsLauncher(ctk.CTk):
             font=ctk.CTkFont(size=16, weight="bold"),
             height=100,
             corner_radius=10,
-            command=lambda app_ref=app: self.launch_app(app_ref),
+            command=partial(self.launch_app, app),
             hover_color=app['color']
         )
         button.pack(fill="both", expand=True)
