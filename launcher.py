@@ -2,7 +2,7 @@
 """
 Cruise Logs Application Launcher
 A modern GUI launcher for Cruise_Logs Streamlit applications
-Version: 2.0.1 (2025-05-14) - Using functools.partial for button bindings
+Version: 2.0.2 (2025-05-14) - Store app data on button object to avoid closure issues
 """
 
 import customtkinter as ctk
@@ -11,7 +11,6 @@ import sys
 import os
 import threading
 from pathlib import Path
-from functools import partial
 
 # Windows-specific subprocess flag to hide console windows
 if sys.platform == 'win32':
@@ -32,7 +31,7 @@ class CruiseLogsLauncher(ctk.CTk):
         super().__init__()
 
         # Configure window
-        self.title("Cruise Logs - Application Launcher v2.0.1")
+        self.title("Cruise Logs - Application Launcher v2.0.2")
         self.geometry("1000x750")
 
         # Center window on screen
@@ -181,9 +180,15 @@ class CruiseLogsLauncher(ctk.CTk):
             font=ctk.CTkFont(size=16, weight="bold"),
             height=100,
             corner_radius=10,
-            command=partial(self.launch_app, app),
             hover_color=app['color']
         )
+
+        # Store app data directly on the button object
+        button._app_data = app.copy()  # Make a copy to avoid reference issues
+
+        # Set command after storing the data
+        button.configure(command=lambda btn=button: self.launch_app_from_button(btn))
+
         button.pack(fill="both", expand=True)
 
         # Description label
@@ -243,6 +248,11 @@ class CruiseLogsLauncher(ctk.CTk):
             hover_color="darkgray"
         )
         exit_button.pack(side="right", padx=5)
+
+    def launch_app_from_button(self, button):
+        """Launch app from button click - extracts app data from button"""
+        app = button._app_data
+        self.launch_app(app)
 
     def launch_app(self, app):
         """Launch a Streamlit application"""
