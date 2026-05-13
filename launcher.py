@@ -179,7 +179,7 @@ class CruiseLogsLauncher(ctk.CTk):
             font=ctk.CTkFont(size=16, weight="bold"),
             height=100,
             corner_radius=10,
-            command=lambda a=app: self.launch_app(a),
+            command=lambda app_ref=app: self.launch_app(app_ref),
             hover_color=app['color']
         )
         button.pack(fill="both", expand=True)
