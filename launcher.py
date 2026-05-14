@@ -5,15 +5,17 @@ A modern GUI launcher for Cruise_Logs Streamlit applications
 Version: 2.0.2 (2025-05-14) - Store app data on button object to avoid closure issues
 """
 
-import customtkinter as ctk
+import os
 import subprocess
 import sys
-import os
 import threading
+from functools import partial
 from pathlib import Path
 
+import customtkinter as ctk
+
 # Windows-specific subprocess flag to hide console windows
-if sys.platform == 'win32':
+if sys.platform == "win32":
     try:
         CREATE_NO_WINDOW = subprocess.CREATE_NO_WINDOW
     except AttributeError:
@@ -43,6 +45,10 @@ class CruiseLogsLauncher(ctk.CTk):
         # Store running processes
         self.processes = {}
 
+        # Port management - start at 8501 and increment for each app
+        self.next_port = 8501
+        self.app_ports = {}  # Track which port each app is using
+
         # Configure grid layout
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(2, weight=1)
@@ -69,7 +75,7 @@ class CruiseLogsLauncher(ctk.CTk):
         height = 750
         x = (self.winfo_screenwidth() // 2) - (width // 2)
         y = (self.winfo_screenheight() // 2) - (height // 2)
-        self.geometry(f'{width}x{height}+{x}+{y}')
+        self.geometry(f"{width}x{height}+{x}+{y}")
 
     def create_header(self):
         """Create the header section"""
@@ -80,7 +86,7 @@ class CruiseLogsLauncher(ctk.CTk):
         title_label = ctk.CTkLabel(
             header_frame,
             text="🚢 Cruise Logs Management System",
-            font=ctk.CTkFont(size=28, weight="bold")
+            font=ctk.CTkFont(size=28, weight="bold"),
         )
         title_label.pack(pady=(0, 5))
 
@@ -89,7 +95,7 @@ class CruiseLogsLauncher(ctk.CTk):
             header_frame,
             text="Select an application to launch",
             font=ctk.CTkFont(size=14),
-            text_color="gray"
+            text_color="gray",
         )
         subtitle_label.pack()
 
@@ -108,57 +114,57 @@ class CruiseLogsLauncher(ctk.CTk):
                 "icon": "🚢",
                 "file": "cruise_form.py",
                 "description": "Main cruise information",
-                "color": "#1f538d"
+                "color": "#1f538d",
             },
             {
                 "name": "Deployment Form",
                 "icon": "⬇️",
                 "file": "dep_form_JSON.py",
                 "description": "Mooring deployments",
-                "color": "#2d5f8d"
+                "color": "#2d5f8d",
             },
             {
                 "name": "Recovery Form",
                 "icon": "⬆️",
                 "file": "rec_form_JSON.py",
                 "description": "Mooring recoveries",
-                "color": "#3d6f9d"
+                "color": "#3d6f9d",
             },
             {
                 "name": "Repair Form",
                 "icon": "🔧",
                 "file": "repair_form_JSON.py",
                 "description": "Equipment repairs",
-                "color": "#4d7fad"
+                "color": "#4d7fad",
             },
             {
                 "name": "ADCP Deployment",
                 "icon": "📡",
                 "file": "adcp_dep_form.py",
                 "description": "ADCP deployment records",
-                "color": "#2d7f5f"
+                "color": "#2d7f5f",
             },
             {
                 "name": "ADCP Recovery",
                 "icon": "📥",
                 "file": "adcp_rec_form.py",
                 "description": "ADCP recovery records",
-                "color": "#3d8f6f"
+                "color": "#3d8f6f",
             },
             {
                 "name": "Release Inventory",
                 "icon": "🔍",
                 "file": "release_inventory_search.py",
                 "description": "Search acoustic releases",
-                "color": "#8d6f3d"
+                "color": "#8d6f3d",
             },
             {
                 "name": "Nylon Inventory",
                 "icon": "🧵",
                 "file": "nylon_inventory_search.py",
                 "description": "Search nylon spools",
-                "color": "#9d7f4d"
-            }
+                "color": "#9d7f4d",
+            },
         ]
 
         # Create buttons in grid (3 columns)
@@ -173,30 +179,37 @@ class CruiseLogsLauncher(ctk.CTk):
         button_frame = ctk.CTkFrame(parent, fg_color="transparent")
         button_frame.grid(row=row, column=col, padx=15, pady=15, sticky="nsew")
 
-        # Main button
+        # Make a deep copy of app data to avoid any reference issues
+        app_data = {
+            "name": str(app["name"]),
+            "icon": str(app["icon"]),
+            "file": str(app["file"]),
+            "description": str(app["description"]),
+            "color": str(app["color"]),
+        }
+
+        # Debug: print what we're setting up
+        print(f"Creating button for: {app_data['name']} -> {app_data['file']}")
+
+        # Main button - use functools.partial for proper binding
         button = ctk.CTkButton(
             button_frame,
-            text=f"{app['icon']}\n{app['name']}",
+            text=f"{app_data['icon']}\n{app_data['name']}",
             font=ctk.CTkFont(size=16, weight="bold"),
             height=100,
             corner_radius=10,
-            hover_color=app['color']
+            hover_color=app_data["color"],
+            command=partial(self.launch_app, app_data),
         )
-
-        # Store app data directly on the button object
-        button._app_data = app.copy()  # Make a copy to avoid reference issues
-
-        # Set command after storing the data
-        button.configure(command=lambda btn=button: self.launch_app_from_button(btn))
 
         button.pack(fill="both", expand=True)
 
         # Description label
         desc_label = ctk.CTkLabel(
             button_frame,
-            text=app['description'],
+            text=app["description"],
             font=ctk.CTkFont(size=11),
-            text_color="gray"
+            text_color="gray",
         )
         desc_label.pack(pady=(5, 0))
 
@@ -206,10 +219,7 @@ class CruiseLogsLauncher(ctk.CTk):
         self.status_frame.grid(row=2, column=0, padx=20, pady=(0, 10), sticky="ew")
 
         self.status_label = ctk.CTkLabel(
-            self.status_frame,
-            text="Ready",
-            font=ctk.CTkFont(size=12),
-            anchor="w"
+            self.status_frame, text="Ready", font=ctk.CTkFont(size=12), anchor="w"
         )
         self.status_label.pack(side="left", padx=10, pady=5)
 
@@ -220,10 +230,7 @@ class CruiseLogsLauncher(ctk.CTk):
 
         # Theme toggle
         theme_button = ctk.CTkButton(
-            footer_frame,
-            text="🌙 Toggle Theme",
-            width=150,
-            command=self.toggle_theme
+            footer_frame, text="🌙 Toggle Theme", width=150, command=self.toggle_theme
         )
         theme_button.pack(side="left", padx=5)
 
@@ -234,7 +241,7 @@ class CruiseLogsLauncher(ctk.CTk):
             width=150,
             command=self.close_all_apps,
             fg_color="red",
-            hover_color="darkred"
+            hover_color="darkred",
         )
         close_all_button.pack(side="left", padx=5)
 
@@ -245,19 +252,14 @@ class CruiseLogsLauncher(ctk.CTk):
             width=150,
             command=self.on_closing,
             fg_color="gray",
-            hover_color="darkgray"
+            hover_color="darkgray",
         )
         exit_button.pack(side="right", padx=5)
 
-    def launch_app_from_button(self, button):
-        """Launch app from button click - extracts app data from button"""
-        app = button._app_data
-        self.launch_app(app)
-
     def launch_app(self, app):
         """Launch a Streamlit application"""
-        app_name = app['name']
-        app_file = app['file']
+        app_name = app["name"]
+        app_file = app["file"]
 
         # Debug output
         print(f"DEBUG: Launching app: {app_name} -> {app_file}")
@@ -273,22 +275,49 @@ class CruiseLogsLauncher(ctk.CTk):
             self.update_status(f"⚠️  {app_name} is already running", warning=True)
             return
 
+        # Assign a port for this app
+        if app_name not in self.app_ports:
+            self.app_ports[app_name] = self.next_port
+            self.next_port += 1
+
+        port = self.app_ports[app_name]
+
         # Launch in a separate thread
-        thread = threading.Thread(target=self._launch_streamlit, args=(app_name, app_file))
+        thread = threading.Thread(
+            target=self._launch_streamlit, args=(app_name, app_file, port)
+        )
         thread.daemon = True
         thread.start()
 
-    def _launch_streamlit(self, app_name, app_file):
+    def _launch_streamlit(self, app_name, app_file, port):
         """Launch Streamlit in a subprocess"""
         try:
-            self.update_status(f"🚀 Launching {app_name}...")
+            self.update_status(f"🚀 Launching {app_name} on port {port}...")
+
+            # Get absolute path to the file
+            abs_app_file = os.path.abspath(app_file)
+            print(f"DEBUG _launch_streamlit: app_name={app_name}, app_file={app_file}")
+            print(f"DEBUG _launch_streamlit: abs_app_file={abs_app_file}")
+            print(f"DEBUG _launch_streamlit: sys.executable={sys.executable}")
+            print(f"DEBUG _launch_streamlit: port={port}")
+
+            cmd = [
+                sys.executable,
+                "-m",
+                "streamlit",
+                "run",
+                abs_app_file,
+                "--server.port",
+                str(port),
+            ]
+            print(f"DEBUG _launch_streamlit: Full command={cmd}")
 
             # Launch streamlit without showing console window
             process = subprocess.Popen(
-                [sys.executable, "-m", "streamlit", "run", app_file],
+                cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                creationflags=CREATE_NO_WINDOW if sys.platform == 'win32' else 0
+                creationflags=CREATE_NO_WINDOW if sys.platform == "win32" else 0,
             )
 
             # Store process
@@ -314,6 +343,10 @@ class CruiseLogsLauncher(ctk.CTk):
                 process.kill()
             del self.processes[app_name]
 
+        # Clear port assignments
+        self.app_ports.clear()
+        self.next_port = 8501
+
         self.update_status(f"✅ Closed {count} application(s)")
 
     def toggle_theme(self):
@@ -333,16 +366,19 @@ class CruiseLogsLauncher(ctk.CTk):
             self.status_label.configure(text=message, text_color="green")
 
         # Reset to default after 5 seconds
-        self.after(5000, lambda: self.status_label.configure(text="Ready", text_color="white"))
+        self.after(
+            5000, lambda: self.status_label.configure(text="Ready", text_color="white")
+        )
 
     def on_closing(self):
         """Handle window close event"""
         if self.processes:
             # Ask for confirmation
             from tkinter import messagebox
+
             if messagebox.askyesno(
                 "Close Launcher",
-                f"{len(self.processes)} application(s) are still running.\nClose them all and exit?"
+                f"{len(self.processes)} application(s) are still running.\nClose them all and exit?",
             ):
                 self.close_all_apps()
                 self.destroy()
