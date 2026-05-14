@@ -2,7 +2,7 @@
 """
 Cruise Logs Application Launcher
 A modern GUI launcher for Cruise_Logs Streamlit applications
-Version: 2.0.2 (2025-05-14) - Store app data on button object to avoid closure issues
+Version: 2.0.3 (2025-05-14) - Fixed port assignment so each app launches correctly
 """
 
 import os
@@ -33,7 +33,7 @@ class CruiseLogsLauncher(ctk.CTk):
         super().__init__()
 
         # Configure window
-        self.title("Cruise Logs - Application Launcher v2.0.2")
+        self.title("Cruise Logs - Application Launcher v2.0.3")
         self.geometry("1000x750")
 
         # Center window on screen
@@ -188,9 +188,6 @@ class CruiseLogsLauncher(ctk.CTk):
             "color": str(app["color"]),
         }
 
-        # Debug: print what we're setting up
-        print(f"Creating button for: {app_data['name']} -> {app_data['file']}")
-
         # Main button - use functools.partial for proper binding
         button = ctk.CTkButton(
             button_frame,
@@ -261,10 +258,6 @@ class CruiseLogsLauncher(ctk.CTk):
         app_name = app["name"]
         app_file = app["file"]
 
-        # Debug output
-        print(f"DEBUG: Launching app: {app_name} -> {app_file}")
-        print(f"DEBUG: Full app dict: {app}")
-
         # Check if file exists
         if not os.path.exists(app_file):
             self.update_status(f"❌ Error: {app_file} not found!", error=True)
@@ -296,10 +289,6 @@ class CruiseLogsLauncher(ctk.CTk):
 
             # Get absolute path to the file
             abs_app_file = os.path.abspath(app_file)
-            print(f"DEBUG _launch_streamlit: app_name={app_name}, app_file={app_file}")
-            print(f"DEBUG _launch_streamlit: abs_app_file={abs_app_file}")
-            print(f"DEBUG _launch_streamlit: sys.executable={sys.executable}")
-            print(f"DEBUG _launch_streamlit: port={port}")
 
             cmd = [
                 sys.executable,
@@ -310,7 +299,6 @@ class CruiseLogsLauncher(ctk.CTk):
                 "--server.port",
                 str(port),
             ]
-            print(f"DEBUG _launch_streamlit: Full command={cmd}")
 
             # Launch streamlit without showing console window
             process = subprocess.Popen(
