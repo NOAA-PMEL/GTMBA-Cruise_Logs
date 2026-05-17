@@ -27,18 +27,22 @@ def get_database_path():
     Get the database path based on the operating system.
     Returns a string path to Cruise_Logs.db
     """
-    if SYSTEM == 'Windows':
-        # Windows: C:\Cruise_Logs\Cruise_Logs.db
-        db_path = r'C:\Cruise_Logs\Cruise_Logs.db'
-    else:
-        # Mac/Linux: Use expanduser for home directory
-        # Assumes ~/Github/Cruise_Logs/Cruise_Logs.db
-        db_path = os.path.expanduser('~/Github/Cruise_Logs/Cruise_Logs.db')
+    # ALWAYS use the database in the same directory as this config file
+    # This ensures consistency across all scripts
+    db_path = str(BASE_DIR / 'Cruise_Logs.db')
 
-    # Check if database exists, if not try relative path
+    # If it doesn't exist, try the old paths for backward compatibility
     if not os.path.exists(db_path):
-        # Fall back to database in same directory as this script
-        db_path = str(BASE_DIR / 'Cruise_Logs.db')
+        if SYSTEM == 'Windows':
+            # Windows: C:\Cruise_Logs\Cruise_Logs.db
+            fallback_path = r'C:\Cruise_Logs\Cruise_Logs.db'
+        else:
+            # Mac/Linux: Use expanduser for home directory
+            # Assumes ~/Github/Cruise_Logs/Cruise_Logs.db
+            fallback_path = os.path.expanduser('~/Github/Cruise_Logs/Cruise_Logs.db')
+
+        if os.path.exists(fallback_path):
+            db_path = fallback_path
 
     return db_path
 
