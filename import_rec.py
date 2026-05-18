@@ -684,7 +684,10 @@ def main():
 
     args = parser.parse_args()
     xml_file = args.xml_file
-    db_file = 'Cruise_Logs.db'
+
+    # Get the script's directory to find the database
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    db_file = os.path.join(script_dir, 'Cruise_Logs.db')
 
     # Check if files exist
     if not os.path.exists(xml_file):
