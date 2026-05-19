@@ -9,6 +9,8 @@ import os
 import subprocess
 import sys
 import threading
+import webbrowser
+import time
 from functools import partial
 from pathlib import Path
 
@@ -298,6 +300,8 @@ class CruiseLogsLauncher(ctk.CTk):
                 abs_app_file,
                 "--server.port",
                 str(port),
+                "--server.headless",
+                "true",
             ]
 
             # Launch streamlit without showing console window
@@ -310,6 +314,11 @@ class CruiseLogsLauncher(ctk.CTk):
 
             # Store process
             self.processes[app_name] = process
+
+            # Wait a moment for Streamlit to start, then open browser
+            time.sleep(2)
+            url = f"http://localhost:{port}"
+            webbrowser.open(url)
 
             self.update_status(f"✅ {app_name} launched successfully!")
 
