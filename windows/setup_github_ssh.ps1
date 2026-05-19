@@ -1,13 +1,8 @@
-# GitHub SSH Setup Script for Cruise_Logs
-# Automates SSH key generation and GitHub configuration
+# Setup GitHub SSH for Cruise_Logs Repository
+# This script converts the repository from HTTPS to SSH authentication
 #
 # USAGE:
 #   powershell -ExecutionPolicy Bypass -File setup_github_ssh.ps1
-
-param(
-    [string]$Email = "",
-    [string]$InstallPath = "C:\Cruise_Logs"
-)
 
 # ============================================================================
 # COLOR OUTPUT FUNCTIONS
@@ -41,13 +36,6 @@ function Write-Header {
     Write-Host ""
 }
 
-function Write-Step {
-    param([string]$Message)
-    Write-Host ""
-    Write-Host ">>> $Message" -ForegroundColor Yellow
-    Write-Host ""
-}
-
 # ============================================================================
 # MAIN SCRIPT
 # ============================================================================
@@ -55,246 +43,307 @@ function Write-Step {
 Write-Header "GitHub SSH Setup for Cruise_Logs"
 
 Write-Info "This script will:"
-Write-Host "  1. Generate SSH keys for GitHub (if needed)" -ForegroundColor White
-Write-Host "  2. Configure Git to use SSH" -ForegroundColor White
-Write-Host "  3. Switch the repository to use SSH" -ForegroundColor White
-Write-Host "  4. Test the connection" -ForegroundColor White
+Write-Host "  1. Check for existing SSH keys"
+Write-Host "  2. Help generate SSH keys if needed"
+Write-Host "  3. Test SSH connection to GitHub"
+Write-Host "  4. Convert repository from HTTPS to SSH"
+Write-Host ""
+
+$Response = Read-Host "Continue? (yes/no)"
+if ($Response -ne "yes") {
+    Write-Info "Setup cancelled"
+    exit 0
+}
+
 Write-Host ""
 
 # ============================================================================
 # STEP 1: Check for Git
 # ============================================================================
-Write-Step "STEP 1: Checking for Git..."
+Write-Info "STEP 1: Checking Git installation..."
+Write-Host ""
 
-$GitFound = $false
 try {
     $GitVersion = & git --version 2>$null
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Git is installed: $GitVersion"
-        $GitFound = $true
     }
 } catch {
-    $GitFound = $false
-}
-
-if (-not $GitFound) {
     Write-Error "Git is not installed!"
     Write-Info "Please install Git from: https://git-scm.com/download/win"
+    Read-Host "Press Enter to exit"
     exit 1
 }
 
-# ============================================================================
-# STEP 2: Get User Email
-# ============================================================================
-Write-Step "STEP 2: Getting User Information..."
-
-if (-not $Email) {
-    $Email = Read-Host "Enter your GitHub email address"
-}
-
-if (-not $Email -or $Email -notmatch "^[^@]+@[^@]+\.[^@]+$") {
-    Write-Error "Invalid email address!"
-    exit 1
-}
-
-Write-Success "Email: $Email"
-
-# Configure Git
-& git config --global user.email $Email
-$GitName = & git config --global user.name
-if (-not $GitName) {
-    $GitName = Read-Host "Enter your name (for Git commits)"
-    & git config --global user.name $GitName
-}
-Write-Success "Git configured for: $GitName <$Email>"
+Write-Host ""
 
 # ============================================================================
-# STEP 3: Check/Generate SSH Keys
+# STEP 2: Check for existing SSH keys
 # ============================================================================
-Write-Step "STEP 3: Setting up SSH Keys..."
+Write-Info "STEP 2: Checking for SSH keys..."
+Write-Host ""
 
 $SshDir = "$env:USERPROFILE\.ssh"
-$KeyFile = "$SshDir\id_ed25519"
-$PubKeyFile = "$KeyFile.pub"
+$KeyFound = $false
+$KeyFiles = @()
 
-# Create .ssh directory if it doesn't exist
-if (-not (Test-Path $SshDir)) {
-    Write-Info "Creating .ssh directory..."
-    New-Item -ItemType Directory -Path $SshDir | Out-Null
+if (Test-Path $SshDir) {
+    $PossibleKeys = @("id_ed25519", "id_rsa", "id_ecdsa")
+    foreach ($key in $PossibleKeys) {
+        if (Test-Path "$SshDir\$key") {
+            Write-Success "Found SSH key: $key"
+            $KeyFiles += "$SshDir\$key"
+            $KeyFound = $true
+        }
+    }
 }
 
-# Check if key already exists
-if (Test-Path $KeyFile) {
-    Write-Warning "SSH key already exists at: $KeyFile"
-    $Response = Read-Host "Use existing key? (yes/no)"
+if (-not $KeyFound) {
+    Write-Warning "No SSH keys found in $SshDir"
+    Write-Host ""
+    Write-Info "Would you like to generate an SSH key now?"
+    Write-Host "This will create a new ed25519 key (recommended)"
+    Write-Host ""
 
-    if ($Response -ne "yes") {
-        Write-Info "Backing up existing key..."
-        $BackupName = "id_ed25519_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
-        Move-Item $KeyFile "$SshDir\$BackupName" -Force
-        if (Test-Path $PubKeyFile) {
-            Move-Item $PubKeyFile "$SshDir\$BackupName.pub" -Force
+    $Response = Read-Host "Generate SSH key? (yes/no)"
+
+    if ($Response -eq "yes") {
+        Write-Host ""
+        $Email = Read-Host "Enter your GitHub email address"
+
+        Write-Info "Generating SSH key..."
+        & ssh-keygen -t ed25519 -C "$Email" -f "$SshDir\id_ed25519"
+
+        if ($LASTEXITCODE -eq 0) {
+            Write-Success "SSH key generated successfully"
+            $KeyFiles += "$SshDir\id_ed25519"
+            $KeyFound = $true
+
+            Write-Host ""
+            Write-Info "Starting ssh-agent..."
+
+            # Start ssh-agent
+            $SshAgent = Get-Service ssh-agent -ErrorAction SilentlyContinue
+            if ($SshAgent) {
+                if ($SshAgent.Status -ne "Running") {
+                    Start-Service ssh-agent
+                }
+            }
+
+            # Add key to ssh-agent
+            Write-Info "Adding key to ssh-agent..."
+            & ssh-add "$SshDir\id_ed25519"
+
+            Write-Host ""
+            Write-Success "Key added to ssh-agent"
+        } else {
+            Write-Error "Failed to generate SSH key"
+            exit 1
         }
-        Write-Success "Backup created: $BackupName"
-
-        # Generate new key
-        Write-Info "Generating new SSH key..."
-        & ssh-keygen -t ed25519 -C $Email -f $KeyFile -N '""'
-        Write-Success "New SSH key generated"
-    }
-} else {
-    # Generate new key
-    Write-Info "Generating SSH key..."
-    & ssh-keygen -t ed25519 -C $Email -f $KeyFile -N '""'
-
-    if (Test-Path $KeyFile) {
-        Write-Success "SSH key generated successfully"
     } else {
-        Write-Error "Failed to generate SSH key"
+        Write-Error "SSH key is required to continue"
+        Write-Info "Please generate an SSH key manually:"
+        Write-Host "  ssh-keygen -t ed25519 -C `"your_email@example.com`""
+        Read-Host "Press Enter to exit"
         exit 1
     }
 }
 
-# ============================================================================
-# STEP 4: Configure SSH
-# ============================================================================
-Write-Step "STEP 4: Configuring SSH..."
+Write-Host ""
 
-$SshConfig = "$SshDir\config"
-$ConfigContent = @"
-Host github.com
-    HostName github.com
-    User git
-    IdentityFile $KeyFile
-    IdentitiesOnly yes
-"@
+# ============================================================================
+# STEP 3: Display public key and instructions
+# ============================================================================
+Write-Info "STEP 3: Add SSH key to GitHub..."
+Write-Host ""
 
-if (Test-Path $SshConfig) {
-    $ExistingConfig = Get-Content $SshConfig -Raw
-    if ($ExistingConfig -notmatch "github.com") {
-        Write-Info "Adding GitHub configuration to SSH config..."
-        Add-Content -Path $SshConfig -Value "`n$ConfigContent"
-        Write-Success "SSH config updated"
-    } else {
-        Write-Success "GitHub already configured in SSH config"
-    }
-} else {
-    Write-Info "Creating SSH config file..."
-    Set-Content -Path $SshConfig -Value $ConfigContent
-    Write-Success "SSH config created"
+$PublicKeyFile = "$SshDir\id_ed25519.pub"
+if (-not (Test-Path $PublicKeyFile)) {
+    $PublicKeyFile = "$SshDir\id_rsa.pub"
 }
 
-# ============================================================================
-# STEP 5: Display Public Key
-# ============================================================================
-Write-Step "STEP 5: Adding SSH Key to GitHub..."
-
-if (Test-Path $PubKeyFile) {
-    $PublicKey = Get-Content $PubKeyFile -Raw
-
+if (Test-Path $PublicKeyFile) {
+    Write-Info "Your public SSH key:"
     Write-Host ""
-    Write-Host "================================================" -ForegroundColor Green
-    Write-Host "YOUR PUBLIC SSH KEY (copy this):" -ForegroundColor Green
-    Write-Host "================================================" -ForegroundColor Green
-    Write-Host $PublicKey -ForegroundColor Yellow
-    Write-Host "================================================" -ForegroundColor Green
+    Write-Host "─────────────────────────────────────────────────" -ForegroundColor Yellow
+    Get-Content $PublicKeyFile | Write-Host -ForegroundColor White
+    Write-Host "─────────────────────────────────────────────────" -ForegroundColor Yellow
     Write-Host ""
 
-    # Copy to clipboard if possible
-    try {
-        Set-Clipboard -Value $PublicKey
-        Write-Success "Public key copied to clipboard!"
-    } catch {
-        Write-Warning "Could not copy to clipboard automatically"
+    Write-Info "Copying public key to clipboard..."
+    Get-Content $PublicKeyFile | Set-Clipboard
+    Write-Success "Public key copied to clipboard!"
+
+    Write-Host ""
+    Write-Info "To add this key to GitHub:"
+    Write-Host "  1. Go to: https://github.com/settings/keys" -ForegroundColor White
+    Write-Host "  2. Click 'New SSH key'" -ForegroundColor White
+    Write-Host "  3. Give it a title (e.g., 'Work Laptop')" -ForegroundColor White
+    Write-Host "  4. Paste the key (already in your clipboard)" -ForegroundColor White
+    Write-Host "  5. Click 'Add SSH key'" -ForegroundColor White
+    Write-Host ""
+
+    $Response = Read-Host "Have you added the key to GitHub? (yes/no)"
+    if ($Response -ne "yes") {
+        Write-Warning "Please add the key to GitHub and run this script again"
+        Read-Host "Press Enter to exit"
+        exit 0
     }
-
-    Write-Info "Please add this SSH key to your GitHub account:"
-    Write-Host "  1. Go to: https://github.com/settings/ssh/new" -ForegroundColor White
-    Write-Host "  2. Title: 'Cruise_Logs - $env:COMPUTERNAME'" -ForegroundColor White
-    Write-Host "  3. Paste the key above into the 'Key' field" -ForegroundColor White
-    Write-Host "  4. Click 'Add SSH key'" -ForegroundColor White
-    Write-Host ""
-
-    Read-Host "Press Enter after adding the key to GitHub"
-} else {
-    Write-Error "Public key file not found!"
-    exit 1
 }
 
-# ============================================================================
-# STEP 6: Test SSH Connection
-# ============================================================================
-Write-Step "STEP 6: Testing GitHub Connection..."
+Write-Host ""
 
-Write-Info "Testing SSH connection to GitHub..."
+# ============================================================================
+# STEP 4: Test SSH connection
+# ============================================================================
+Write-Info "STEP 4: Testing SSH connection to GitHub..."
+Write-Host ""
+
+Write-Info "Testing connection..."
 $TestResult = & ssh -T git@github.com 2>&1
+$SshSuccess = $TestResult -match "successfully authenticated"
 
-if ($TestResult -match "successfully authenticated") {
+if ($SshSuccess) {
     Write-Success "SSH connection to GitHub successful!"
+    Write-Host "  $TestResult" -ForegroundColor White
 } else {
-    Write-Warning "SSH test output: $TestResult"
-    Write-Error "SSH connection failed!"
-    Write-Info "Please verify:"
-    Write-Host "  1. You added the SSH key to your GitHub account" -ForegroundColor White
-    Write-Host "  2. You have access to NOAA-PMEL/GTMBA-Cruise_Logs repository" -ForegroundColor White
-    Write-Host "  3. Your GitHub account email matches: $Email" -ForegroundColor White
-    exit 1
+    Write-Error "SSH connection failed"
+    Write-Host "  $TestResult" -ForegroundColor Red
+    Write-Host ""
+    Write-Info "Common issues:"
+    Write-Host "  - SSH key not added to GitHub account"
+    Write-Host "  - ssh-agent not running"
+    Write-Host "  - Firewall blocking SSH (port 22)"
+    Write-Host ""
+    $Response = Read-Host "Continue anyway? (yes/no)"
+    if ($Response -ne "yes") {
+        exit 1
+    }
 }
 
-# ============================================================================
-# STEP 7: Switch Repository to SSH
-# ============================================================================
-Write-Step "STEP 7: Switching Repository to SSH..."
+Write-Host ""
 
-if (-not (Test-Path $InstallPath)) {
-    Write-Error "Install path not found: $InstallPath"
-    Write-Info "Please run this script from the correct directory"
-    exit 1
+# ============================================================================
+# STEP 5: Find repository location
+# ============================================================================
+Write-Info "STEP 5: Locating repository..."
+Write-Host ""
+
+$RepoPath = $null
+$PossiblePaths = @(
+    "C:\Cruise_Logs",
+    "$env:USERPROFILE\Documents\Cruise_Logs",
+    "$env:USERPROFILE\Cruise_Logs",
+    "$env:USERPROFILE\Github\GTMBA-Cruise_Logs",
+    (Get-Location).Path
+)
+
+foreach ($path in $PossiblePaths) {
+    if (Test-Path "$path\.git") {
+        $RepoPath = $path
+        Write-Success "Found repository at: $RepoPath"
+        break
+    }
 }
 
-Push-Location $InstallPath
+if (-not $RepoPath) {
+    Write-Warning "Could not auto-detect repository location"
+    Write-Host ""
+    $CustomPath = Read-Host "Enter the full path to your Cruise_Logs repository"
+
+    if (Test-Path "$CustomPath\.git") {
+        $RepoPath = $CustomPath
+        Write-Success "Repository found"
+    } else {
+        Write-Error "Not a valid Git repository: $CustomPath"
+        exit 1
+    }
+}
+
+Write-Host ""
+
+# ============================================================================
+# STEP 6: Check current remote
+# ============================================================================
+Write-Info "STEP 6: Checking current Git remote..."
+Write-Host ""
+
+Push-Location $RepoPath
 
 $CurrentRemote = & git remote get-url origin 2>$null
-Write-Info "Current remote: $CurrentRemote"
 
-if ($CurrentRemote -match "^https://") {
-    Write-Info "Switching from HTTPS to SSH..."
-    & git remote set-url origin git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+if ($CurrentRemote) {
+    Write-Info "Current remote URL:"
+    Write-Host "  $CurrentRemote" -ForegroundColor White
+    Write-Host ""
 
-    $NewRemote = & git remote get-url origin
-    if ($NewRemote -match "^git@github.com") {
-        Write-Success "Repository switched to SSH"
-        Write-Info "New remote: $NewRemote"
-    } else {
-        Write-Error "Failed to switch remote"
+    if ($CurrentRemote -match "^git@github.com:") {
+        Write-Success "Repository is already using SSH!"
+        Write-Host ""
+        Write-Info "No changes needed."
+        Pop-Location
+        Read-Host "Press Enter to exit"
+        exit 0
     }
-} elseif ($CurrentRemote -match "^git@github.com") {
-    Write-Success "Repository already using SSH"
+
+    if ($CurrentRemote -match "https://github.com/") {
+        Write-Info "Repository is using HTTPS - will convert to SSH"
+    } else {
+        Write-Warning "Remote URL format not recognized"
+        Write-Info "Will set to: git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git"
+    }
 } else {
-    Write-Warning "Unexpected remote format: $CurrentRemote"
+    Write-Warning "No remote 'origin' found"
+    Write-Info "Will add: git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git"
 }
 
-Pop-Location
+Write-Host ""
 
 # ============================================================================
-# STEP 8: Test Push Access
+# STEP 7: Convert to SSH
 # ============================================================================
-Write-Step "STEP 8: Testing Push Access..."
+Write-Info "STEP 7: Converting repository to SSH..."
+Write-Host ""
 
-Push-Location $InstallPath
+$SshUrl = "git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git"
 
-Write-Info "Testing git push (dry-run)..."
-$PushTest = & git push --dry-run origin main 2>&1
+Write-Info "Setting remote URL to: $SshUrl"
+& git remote set-url origin $SshUrl
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Success "Push access confirmed!"
+    Write-Success "Remote URL updated successfully"
+
+    # Verify the change
+    $NewRemote = & git remote get-url origin
+    Write-Host ""
+    Write-Info "New remote URL:"
+    Write-Host "  $NewRemote" -ForegroundColor Green
 } else {
-    Write-Warning "Push test output: $PushTest"
-    Write-Error "You may not have write access to the repository"
-    Write-Info "Please contact the repository administrator"
+    Write-Error "Failed to update remote URL"
+    Pop-Location
+    exit 1
+}
+
+Write-Host ""
+
+# ============================================================================
+# STEP 8: Test Git operations
+# ============================================================================
+Write-Info "STEP 8: Testing Git operations..."
+Write-Host ""
+
+Write-Info "Fetching from remote..."
+& git fetch origin 2>&1 | Out-Null
+
+if ($LASTEXITCODE -eq 0) {
+    Write-Success "Git fetch successful - SSH is working!"
+} else {
+    Write-Error "Git fetch failed"
+    Write-Info "You may need to troubleshoot SSH connection"
 }
 
 Pop-Location
+Write-Host ""
 
 # ============================================================================
 # COMPLETION
@@ -306,17 +355,18 @@ Write-Host "================================================" -ForegroundColor G
 Write-Host ""
 
 Write-Host "Summary:" -ForegroundColor Green
-Write-Host "  SSH Key: $KeyFile" -ForegroundColor White
-Write-Host "  Email: $Email" -ForegroundColor White
-Write-Host "  Remote: git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git" -ForegroundColor White
+Write-Host "  Repository:  $RepoPath" -ForegroundColor White
+Write-Host "  Remote URL:  $SshUrl" -ForegroundColor White
+Write-Host "  SSH Status:  Configured" -ForegroundColor White
 Write-Host ""
 
-Write-Host "You can now push database updates with:" -ForegroundColor Yellow
-Write-Host "  cd $InstallPath" -ForegroundColor White
-Write-Host "  git add Cruise_Logs.db" -ForegroundColor White
-Write-Host "  git commit -m 'Updated cruise logs'" -ForegroundColor White
-Write-Host "  git push origin main" -ForegroundColor White
+Write-Host "You can now:" -ForegroundColor Yellow
+Write-Host "  • git pull - Pull latest changes" -ForegroundColor White
+Write-Host "  • git push - Push your changes" -ForegroundColor White
+Write-Host "  • git fetch - Fetch remote updates" -ForegroundColor White
 Write-Host ""
 
-Write-Host "For help, see: $InstallPath\windows\FIELD_DEPLOYMENT_GUIDE.md" -ForegroundColor Cyan
+Write-Host "All Git operations will now use SSH authentication." -ForegroundColor Cyan
 Write-Host ""
+
+Read-Host "Press Enter to exit"

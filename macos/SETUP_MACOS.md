@@ -448,6 +448,25 @@ conda update --all
 
 ## SSH Key Setup (for GitHub)
 
+### Automated Setup (Recommended)
+
+After installation, run the SSH setup script to convert from HTTPS to SSH:
+
+```bash
+cd ~/Github/GTMBA-Cruise_Logs/macos
+bash setup_github_ssh.sh
+```
+
+This script will:
+- Check for existing SSH keys or help you generate new ones
+- Guide you through adding the key to GitHub
+- Test the SSH connection
+- Convert your repository from HTTPS to SSH
+
+### Manual Setup
+
+If you prefer to set up SSH manually:
+
 ```bash
 # Generate SSH key
 ssh-keygen -t ed25519 -C "your_email@example.com"
@@ -466,6 +485,9 @@ pbcopy < ~/.ssh/id_ed25519.pub
 
 # Test connection
 ssh -T git@github.com
+
+# Convert repository to SSH
+git remote set-url origin git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
 ```
 
 ## Performance Tips

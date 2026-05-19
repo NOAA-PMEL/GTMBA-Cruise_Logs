@@ -1,38 +1,37 @@
 #!/bin/bash
-# GitHub SSH Setup Script for Cruise_Logs (macOS/Linux)
-# Automates SSH key generation and GitHub configuration
+# Setup GitHub SSH for Cruise_Logs Repository
+# This script converts the repository from HTTPS to SSH authentication
 #
 # USAGE:
 #   bash setup_github_ssh.sh
+#   or: chmod +x setup_github_ssh.sh && ./setup_github_ssh.sh
 
-# Colors
+# ============================================================================
+# COLOR OUTPUT FUNCTIONS
+# ============================================================================
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Default install path
-INSTALL_PATH="${HOME}/Cruise_Logs"
-
-# Functions
-print_success() {
+success() {
     echo -e "${GREEN}[OK]${NC} $1"
 }
 
-print_error() {
+error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-print_info() {
+info() {
     echo -e "${CYAN}[INFO]${NC} $1"
 }
 
-print_warning() {
+warn() {
     echo -e "${YELLOW}[WARN]${NC} $1"
 }
 
-print_header() {
+header() {
     echo ""
     echo -e "${CYAN}================================================${NC}"
     echo -e "${CYAN}  $1${NC}"
@@ -40,289 +39,297 @@ print_header() {
     echo ""
 }
 
-print_step() {
-    echo ""
-    echo -e "${YELLOW}>>> $1${NC}"
-    echo ""
-}
-
 # ============================================================================
 # MAIN SCRIPT
 # ============================================================================
 
-print_header "GitHub SSH Setup for Cruise_Logs"
+header "GitHub SSH Setup for Cruise_Logs"
 
-print_info "This script will:"
-echo "  1. Generate SSH keys for GitHub (if needed)"
-echo "  2. Configure Git to use SSH"
-echo "  3. Switch the repository to use SSH"
-echo "  4. Test the connection"
+info "This script will:"
+echo "  1. Check for existing SSH keys"
+echo "  2. Help generate SSH keys if needed"
+echo "  3. Test SSH connection to GitHub"
+echo "  4. Convert repository from HTTPS to SSH"
+echo ""
+
+read -p "Continue? (yes/no): " response
+if [ "$response" != "yes" ]; then
+    info "Setup cancelled"
+    exit 0
+fi
+
 echo ""
 
 # ============================================================================
 # STEP 1: Check for Git
 # ============================================================================
-print_step "STEP 1: Checking for Git..."
+info "STEP 1: Checking Git installation..."
+echo ""
 
-if command -v git &> /dev/null; then
-    GIT_VERSION=$(git --version)
-    print_success "Git is installed: $GIT_VERSION"
+if command -v git >/dev/null 2>&1; then
+    git_version=$(git --version)
+    success "Git is installed: $git_version"
 else
-    print_error "Git is not installed!"
-    print_info "Install with: brew install git"
+    error "Git is not installed!"
+    info "Install with: brew install git"
     exit 1
 fi
 
-# ============================================================================
-# STEP 2: Get User Email
-# ============================================================================
-print_step "STEP 2: Getting User Information..."
-
-if [ -z "$1" ]; then
-    read -p "Enter your GitHub email address: " EMAIL
-else
-    EMAIL="$1"
-fi
-
-if [[ ! "$EMAIL" =~ ^[^@]+@[^@]+\.[^@]+$ ]]; then
-    print_error "Invalid email address!"
-    exit 1
-fi
-
-print_success "Email: $EMAIL"
-
-# Configure Git
-git config --global user.email "$EMAIL"
-GIT_NAME=$(git config --global user.name)
-if [ -z "$GIT_NAME" ]; then
-    read -p "Enter your name (for Git commits): " GIT_NAME
-    git config --global user.name "$GIT_NAME"
-fi
-print_success "Git configured for: $GIT_NAME <$EMAIL>"
+echo ""
 
 # ============================================================================
-# STEP 3: Check/Generate SSH Keys
+# STEP 2: Check for existing SSH keys
 # ============================================================================
-print_step "STEP 3: Setting up SSH Keys..."
+info "STEP 2: Checking for SSH keys..."
+echo ""
 
-SSH_DIR="$HOME/.ssh"
-KEY_FILE="$SSH_DIR/id_ed25519"
-PUB_KEY_FILE="$KEY_FILE.pub"
+ssh_dir="$HOME/.ssh"
+key_found=false
+key_file=""
 
-# Create .ssh directory if it doesn't exist
-if [ ! -d "$SSH_DIR" ]; then
-    print_info "Creating .ssh directory..."
-    mkdir -p "$SSH_DIR"
-    chmod 700 "$SSH_DIR"
-fi
-
-# Check if key already exists
-if [ -f "$KEY_FILE" ]; then
-    print_warning "SSH key already exists at: $KEY_FILE"
-    read -p "Use existing key? (yes/no): " RESPONSE
-
-    if [ "$RESPONSE" != "yes" ]; then
-        print_info "Backing up existing key..."
-        BACKUP_NAME="id_ed25519_backup_$(date +%Y%m%d_%H%M%S)"
-        mv "$KEY_FILE" "$SSH_DIR/$BACKUP_NAME"
-        if [ -f "$PUB_KEY_FILE" ]; then
-            mv "$PUB_KEY_FILE" "$SSH_DIR/$BACKUP_NAME.pub"
+if [ -d "$ssh_dir" ]; then
+    for key in "id_ed25519" "id_rsa" "id_ecdsa"; do
+        if [ -f "$ssh_dir/$key" ]; then
+            success "Found SSH key: $key"
+            key_file="$ssh_dir/$key"
+            key_found=true
+            break
         fi
-        print_success "Backup created: $BACKUP_NAME"
+    done
+fi
 
-        # Generate new key
-        print_info "Generating new SSH key..."
-        ssh-keygen -t ed25519 -C "$EMAIL" -f "$KEY_FILE" -N ""
-        print_success "New SSH key generated"
-    fi
-else
-    # Generate new key
-    print_info "Generating SSH key..."
-    ssh-keygen -t ed25519 -C "$EMAIL" -f "$KEY_FILE" -N ""
+if [ "$key_found" = false ]; then
+    warn "No SSH keys found in $ssh_dir"
+    echo ""
+    info "Would you like to generate an SSH key now?"
+    echo "This will create a new ed25519 key (recommended)"
+    echo ""
 
-    if [ -f "$KEY_FILE" ]; then
-        print_success "SSH key generated successfully"
+    read -p "Generate SSH key? (yes/no): " response
+
+    if [ "$response" = "yes" ]; then
+        echo ""
+        read -p "Enter your GitHub email address: " email
+
+        info "Generating SSH key..."
+        ssh-keygen -t ed25519 -C "$email" -f "$ssh_dir/id_ed25519"
+
+        if [ $? -eq 0 ]; then
+            success "SSH key generated successfully"
+            key_file="$ssh_dir/id_ed25519"
+            key_found=true
+
+            echo ""
+            info "Starting ssh-agent..."
+            eval "$(ssh-agent -s)"
+
+            info "Adding key to ssh-agent..."
+            ssh-add "$key_file"
+
+            echo ""
+            success "Key added to ssh-agent"
+        else
+            error "Failed to generate SSH key"
+            exit 1
+        fi
     else
-        print_error "Failed to generate SSH key"
+        error "SSH key is required to continue"
+        info "Please generate an SSH key manually:"
+        echo "  ssh-keygen -t ed25519 -C \"your_email@example.com\""
         exit 1
     fi
 fi
 
-# Set proper permissions
-chmod 600 "$KEY_FILE"
-chmod 644 "$PUB_KEY_FILE"
+echo ""
 
 # ============================================================================
-# STEP 4: Configure SSH
+# STEP 3: Display public key and instructions
 # ============================================================================
-print_step "STEP 4: Configuring SSH..."
+info "STEP 3: Add SSH key to GitHub..."
+echo ""
 
-SSH_CONFIG="$SSH_DIR/config"
-CONFIG_CONTENT="Host github.com
-    HostName github.com
-    User git
-    IdentityFile $KEY_FILE
-    IdentitiesOnly yes"
-
-if [ -f "$SSH_CONFIG" ]; then
-    if ! grep -q "github.com" "$SSH_CONFIG"; then
-        print_info "Adding GitHub configuration to SSH config..."
-        echo "" >> "$SSH_CONFIG"
-        echo "$CONFIG_CONTENT" >> "$SSH_CONFIG"
-        print_success "SSH config updated"
-    else
-        print_success "GitHub already configured in SSH config"
-    fi
-else
-    print_info "Creating SSH config file..."
-    echo "$CONFIG_CONTENT" > "$SSH_CONFIG"
-    chmod 600 "$SSH_CONFIG"
-    print_success "SSH config created"
+pub_key_file="$ssh_dir/id_ed25519.pub"
+if [ ! -f "$pub_key_file" ]; then
+    pub_key_file="$ssh_dir/id_rsa.pub"
 fi
 
-# ============================================================================
-# STEP 5: Start SSH Agent and Add Key (macOS specific)
-# ============================================================================
-print_step "STEP 5: Adding Key to SSH Agent..."
-
-# Start ssh-agent if not running
-if [ -z "$SSH_AUTH_SOCK" ]; then
-    eval "$(ssh-agent -s)" > /dev/null
-fi
-
-# Add key to agent
-ssh-add "$KEY_FILE" 2>/dev/null
-if [ $? -eq 0 ]; then
-    print_success "SSH key added to agent"
-else
-    print_warning "Could not add key to agent (may already be added)"
-fi
-
-# macOS: Add to keychain
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    print_info "Adding key to macOS Keychain..."
-    ssh-add --apple-use-keychain "$KEY_FILE" 2>/dev/null
-    if [ $? -eq 0 ]; then
-        print_success "Key added to macOS Keychain"
-
-        # Update SSH config for keychain
-        if ! grep -q "UseKeychain yes" "$SSH_CONFIG"; then
-            sed -i '' '/Host github.com/a\
-    UseKeychain yes\
-    AddKeysToAgent yes
-' "$SSH_CONFIG"
-        fi
-    fi
-fi
-
-# ============================================================================
-# STEP 6: Display Public Key
-# ============================================================================
-print_step "STEP 6: Adding SSH Key to GitHub..."
-
-if [ -f "$PUB_KEY_FILE" ]; then
-    PUBLIC_KEY=$(cat "$PUB_KEY_FILE")
-
+if [ -f "$pub_key_file" ]; then
+    info "Your public SSH key:"
     echo ""
-    echo -e "${GREEN}================================================${NC}"
-    echo -e "${GREEN}YOUR PUBLIC SSH KEY (copy this):${NC}"
-    echo -e "${GREEN}================================================${NC}"
-    echo -e "${YELLOW}$PUBLIC_KEY${NC}"
-    echo -e "${GREEN}================================================${NC}"
+    echo "─────────────────────────────────────────────────"
+    cat "$pub_key_file"
+    echo "─────────────────────────────────────────────────"
     echo ""
 
-    # Copy to clipboard if possible
-    if command -v pbcopy &> /dev/null; then
-        echo "$PUBLIC_KEY" | pbcopy
-        print_success "Public key copied to clipboard!"
-    elif command -v xclip &> /dev/null; then
-        echo "$PUBLIC_KEY" | xclip -selection clipboard
-        print_success "Public key copied to clipboard!"
+    info "Copying public key to clipboard..."
+    if command -v pbcopy >/dev/null 2>&1; then
+        cat "$pub_key_file" | pbcopy
+        success "Public key copied to clipboard!"
     else
-        print_warning "Could not copy to clipboard automatically"
+        warn "Could not copy to clipboard (pbcopy not found)"
     fi
 
-    print_info "Please add this SSH key to your GitHub account:"
-    echo "  1. Go to: https://github.com/settings/ssh/new"
-    echo "  2. Title: 'Cruise_Logs - $(hostname)'"
-    echo "  3. Paste the key above into the 'Key' field"
-    echo "  4. Click 'Add SSH key'"
+    echo ""
+    info "To add this key to GitHub:"
+    echo "  1. Go to: https://github.com/settings/keys"
+    echo "  2. Click 'New SSH key'"
+    echo "  3. Give it a title (e.g., 'Work Mac')"
+    echo "  4. Paste the key (already in your clipboard)"
+    echo "  5. Click 'Add SSH key'"
     echo ""
 
-    read -p "Press Enter after adding the key to GitHub..."
-else
-    print_error "Public key file not found!"
-    exit 1
-fi
-
-# ============================================================================
-# STEP 7: Test SSH Connection
-# ============================================================================
-print_step "STEP 7: Testing GitHub Connection..."
-
-print_info "Testing SSH connection to GitHub..."
-TEST_RESULT=$(ssh -T git@github.com 2>&1)
-
-if echo "$TEST_RESULT" | grep -q "successfully authenticated"; then
-    print_success "SSH connection to GitHub successful!"
-else
-    print_warning "SSH test output: $TEST_RESULT"
-    print_error "SSH connection failed!"
-    print_info "Please verify:"
-    echo "  1. You added the SSH key to your GitHub account"
-    echo "  2. You have access to NOAA-PMEL/GTMBA-Cruise_Logs repository"
-    echo "  3. Your GitHub account email matches: $EMAIL"
-    exit 1
-fi
-
-# ============================================================================
-# STEP 8: Switch Repository to SSH
-# ============================================================================
-print_step "STEP 8: Switching Repository to SSH..."
-
-if [ ! -d "$INSTALL_PATH" ]; then
-    print_error "Install path not found: $INSTALL_PATH"
-    print_info "Please run this script from the correct directory"
-    exit 1
-fi
-
-cd "$INSTALL_PATH"
-
-CURRENT_REMOTE=$(git remote get-url origin 2>/dev/null)
-print_info "Current remote: $CURRENT_REMOTE"
-
-if [[ "$CURRENT_REMOTE" =~ ^https:// ]]; then
-    print_info "Switching from HTTPS to SSH..."
-    git remote set-url origin git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
-
-    NEW_REMOTE=$(git remote get-url origin)
-    if [[ "$NEW_REMOTE" =~ ^git@github.com ]]; then
-        print_success "Repository switched to SSH"
-        print_info "New remote: $NEW_REMOTE"
-    else
-        print_error "Failed to switch remote"
+    read -p "Have you added the key to GitHub? (yes/no): " response
+    if [ "$response" != "yes" ]; then
+        warn "Please add the key to GitHub and run this script again"
+        exit 0
     fi
-elif [[ "$CURRENT_REMOTE" =~ ^git@github.com ]]; then
-    print_success "Repository already using SSH"
-else
-    print_warning "Unexpected remote format: $CURRENT_REMOTE"
 fi
 
-# ============================================================================
-# STEP 9: Test Push Access
-# ============================================================================
-print_step "STEP 9: Testing Push Access..."
+echo ""
 
-print_info "Testing git push (dry-run)..."
-PUSH_TEST=$(git push --dry-run origin main 2>&1)
+# ============================================================================
+# STEP 4: Test SSH connection
+# ============================================================================
+info "STEP 4: Testing SSH connection to GitHub..."
+echo ""
+
+info "Testing connection..."
+ssh_test=$(ssh -T git@github.com 2>&1)
+
+if echo "$ssh_test" | grep -q "successfully authenticated"; then
+    success "SSH connection to GitHub successful!"
+    echo "  $ssh_test"
+else
+    error "SSH connection failed"
+    echo "  $ssh_test"
+    echo ""
+    info "Common issues:"
+    echo "  - SSH key not added to GitHub account"
+    echo "  - ssh-agent not running"
+    echo "  - Firewall blocking SSH (port 22)"
+    echo ""
+    read -p "Continue anyway? (yes/no): " response
+    if [ "$response" != "yes" ]; then
+        exit 1
+    fi
+fi
+
+echo ""
+
+# ============================================================================
+# STEP 5: Find repository location
+# ============================================================================
+info "STEP 5: Locating repository..."
+echo ""
+
+repo_path=""
+possible_paths=(
+    "$HOME/Github/GTMBA-Cruise_Logs"
+    "$HOME/Documents/Cruise_Logs"
+    "$HOME/Cruise_Logs"
+    "$(pwd)"
+)
+
+for path in "${possible_paths[@]}"; do
+    if [ -d "$path/.git" ]; then
+        repo_path="$path"
+        success "Found repository at: $repo_path"
+        break
+    fi
+done
+
+if [ -z "$repo_path" ]; then
+    warn "Could not auto-detect repository location"
+    echo ""
+    read -p "Enter the full path to your Cruise_Logs repository: " custom_path
+
+    if [ -d "$custom_path/.git" ]; then
+        repo_path="$custom_path"
+        success "Repository found"
+    else
+        error "Not a valid Git repository: $custom_path"
+        exit 1
+    fi
+fi
+
+echo ""
+
+# ============================================================================
+# STEP 6: Check current remote
+# ============================================================================
+info "STEP 6: Checking current Git remote..."
+echo ""
+
+cd "$repo_path" || exit 1
+
+current_remote=$(git remote get-url origin 2>/dev/null)
+
+if [ -n "$current_remote" ]; then
+    info "Current remote URL:"
+    echo "  $current_remote"
+    echo ""
+
+    if echo "$current_remote" | grep -q "^git@github.com:"; then
+        success "Repository is already using SSH!"
+        echo ""
+        info "No changes needed."
+        exit 0
+    fi
+
+    if echo "$current_remote" | grep -q "https://github.com/"; then
+        info "Repository is using HTTPS - will convert to SSH"
+    else
+        warn "Remote URL format not recognized"
+        info "Will set to: git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git"
+    fi
+else
+    warn "No remote 'origin' found"
+    info "Will add: git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git"
+fi
+
+echo ""
+
+# ============================================================================
+# STEP 7: Convert to SSH
+# ============================================================================
+info "STEP 7: Converting repository to SSH..."
+echo ""
+
+ssh_url="git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git"
+
+info "Setting remote URL to: $ssh_url"
+git remote set-url origin "$ssh_url"
 
 if [ $? -eq 0 ]; then
-    print_success "Push access confirmed!"
+    success "Remote URL updated successfully"
+
+    # Verify the change
+    new_remote=$(git remote get-url origin)
+    echo ""
+    info "New remote URL:"
+    echo -e "  ${GREEN}$new_remote${NC}"
 else
-    print_warning "Push test output: $PUSH_TEST"
-    print_error "You may not have write access to the repository"
-    print_info "Please contact the repository administrator"
+    error "Failed to update remote URL"
+    exit 1
 fi
+
+echo ""
+
+# ============================================================================
+# STEP 8: Test Git operations
+# ============================================================================
+info "STEP 8: Testing Git operations..."
+echo ""
+
+info "Fetching from remote..."
+if git fetch origin >/dev/null 2>&1; then
+    success "Git fetch successful - SSH is working!"
+else
+    error "Git fetch failed"
+    info "You may need to troubleshoot SSH connection"
+fi
+
+echo ""
 
 # ============================================================================
 # COMPLETION
@@ -334,17 +341,16 @@ echo -e "${GREEN}================================================${NC}"
 echo ""
 
 echo -e "${GREEN}Summary:${NC}"
-echo "  SSH Key: $KEY_FILE"
-echo "  Email: $EMAIL"
-echo "  Remote: git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git"
+echo "  Repository:  $repo_path"
+echo "  Remote URL:  $ssh_url"
+echo "  SSH Status:  Configured"
 echo ""
 
-echo -e "${YELLOW}You can now push database updates with:${NC}"
-echo "  cd $INSTALL_PATH"
-echo "  git add Cruise_Logs.db"
-echo "  git commit -m 'Updated cruise logs'"
-echo "  git push origin main"
+echo -e "${YELLOW}You can now:${NC}"
+echo "  • git pull - Pull latest changes"
+echo "  • git push - Push your changes"
+echo "  • git fetch - Fetch remote updates"
 echo ""
 
-echo -e "${CYAN}For help, see: $INSTALL_PATH/macos/README.md${NC}"
+echo -e "${CYAN}All Git operations will now use SSH authentication.${NC}"
 echo ""
