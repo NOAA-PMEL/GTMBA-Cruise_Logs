@@ -13,7 +13,7 @@ BACKUP_SCRIPT="${SCRIPT_DIR}/backup_database.py"
 
 echo "========================================"
 echo "Cruise_Logs Database Backup Setup"
-echo "Weekly and Monthly Backups"
+echo "Weekly (Sundays) and Monthly Backups"
 echo "========================================"
 echo ""
 echo "Script directory: $SCRIPT_DIR"
@@ -64,12 +64,26 @@ if [ "$OS" == "Darwin" ]; then
     <string>${SCRIPT_DIR}</string>
 
     <key>StartCalendarInterval</key>
-    <dict>
-        <key>Hour</key>
-        <integer>2</integer>
-        <key>Minute</key>
-        <integer>0</integer>
-    </dict>
+    <array>
+        <!-- Weekly: Every Sunday at 2 AM -->
+        <dict>
+            <key>Weekday</key>
+            <integer>0</integer>
+            <key>Hour</key>
+            <integer>2</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <!-- Monthly: 1st of month at 2 AM -->
+        <dict>
+            <key>Day</key>
+            <integer>1</integer>
+            <key>Hour</key>
+            <integer>2</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+    </array>
 
     <key>StandardOutPath</key>
     <string>${SCRIPT_DIR}/backup.log</string>
@@ -91,9 +105,9 @@ EOF
 
     echo "✅ Loaded launchd job"
     echo ""
-    echo "Backups will run at 2:00 AM:"
-    echo "  - Weekly backups on most days"
-    echo "  - Monthly backups on the 1st of each month"
+    echo "Backups will run:"
+    echo "  - Every Sunday at 2:00 AM (weekly)"
+    echo "  - 1st of each month at 2:00 AM (monthly)"
     echo ""
     echo "To check status:"
     echo "  launchctl list | grep cruiselogs"
@@ -103,26 +117,28 @@ EOF
     echo "  rm ~/Library/LaunchAgents/gov.noaa.cruiselogs.backup.plist"
 
 elif [ "$OS" == "Linux" ]; then
-    echo "Detected Linux - setting up cron job"
+    echo "Detected Linux - setting up cron jobs"
     echo ""
 
-    # Create cron job entry
-    CRON_ENTRY="0 2 * * * cd ${SCRIPT_DIR} && /usr/bin/python3 ${BACKUP_SCRIPT} >> ${SCRIPT_DIR}/backup.log 2>&1"
-
-    # Check if cron job already exists
+    # Remove old cron job if exists
     if crontab -l 2>/dev/null | grep -q "backup_database.py"; then
-        echo "⚠️  Cron job already exists. Removing old entry..."
+        echo "⚠️  Removing old cron jobs..."
         crontab -l 2>/dev/null | grep -v "backup_database.py" | crontab -
     fi
 
-    # Add new cron job
-    (crontab -l 2>/dev/null; echo "$CRON_ENTRY") | crontab -
+    # Add weekly backup (Sunday at 2 AM)
+    WEEKLY_ENTRY="0 2 * * 0 cd ${SCRIPT_DIR} && /usr/bin/python3 ${BACKUP_SCRIPT} >> ${SCRIPT_DIR}/backup.log 2>&1"
+    # Add monthly backup (1st of month at 2 AM)
+    MONTHLY_ENTRY="0 2 1 * * cd ${SCRIPT_DIR} && /usr/bin/python3 ${BACKUP_SCRIPT} >> ${SCRIPT_DIR}/backup.log 2>&1"
 
-    echo "✅ Added cron job"
+    # Add both cron jobs
+    (crontab -l 2>/dev/null; echo "$WEEKLY_ENTRY"; echo "$MONTHLY_ENTRY") | crontab -
+
+    echo "✅ Added cron jobs"
     echo ""
-    echo "Backups will run at 2:00 AM:"
-    echo "  - Weekly backups on most days"
-    echo "  - Monthly backups on the 1st of each month"
+    echo "Backups will run:"
+    echo "  - Every Sunday at 2:00 AM (weekly)"
+    echo "  - 1st of each month at 2:00 AM (monthly)"
     echo ""
     echo "To check cron jobs:"
     echo "  crontab -l"

@@ -5,7 +5,7 @@
 I've created a comprehensive, production-ready backup system for your Cruise_Logs database with these features:
 
 ### ✅ Automated Features
-- **Weekly backups at 2 AM** (automatic)
+- **Weekly backups every Sunday at 2 AM** (automatic)
 - **Monthly backups on the 1st** (automatic)
 - **Automatic cleanup** of old backups based on retention policy
 - **Database integrity verification** before and after each backup
@@ -42,7 +42,7 @@ cd /Users/lake/NOAA-GitHub/GTMBA-Cruise_Logs
 
 This will:
 - Test that backups work
-- Install an automated backup job at 2:00 AM
+- Install automated backup jobs (Sundays + 1st of month at 2:00 AM)
 - Create your first backup
 - Show you how to monitor and manage backups
 
@@ -64,8 +64,8 @@ python backup_database.py --verify-only
 ### 3. Let It Run!
 
 The system will now automatically:
-- Create weekly backups at 2 AM
-- Create monthly backups on the 1st of each month
+- Create weekly backups every Sunday at 2 AM
+- Create monthly backups on the 1st of each month at 2 AM
 - Clean up old backups
 - Log all activities to `backup.log`
 
@@ -98,11 +98,11 @@ If you set this up today (May 16, 2026), here's what will happen:
 
 | Date | Type | Kept Until | Why? |
 |------|------|------------|------|
-| May 16 | Weekly | August 10 | Regular day |
-| May 17 | Weekly | August 17 | Regular day |
-| May 18 | Weekly | August 24 | Regular day |
-| May 19-31 | Weekly | Various | Regular days |
+| May 18 | Weekly | August 10 | Sunday |
+| May 25 | Weekly | August 17 | Sunday |
 | June 1 | **Monthly** | June 1, 2027 | 1st of month |
+| June 8 | Weekly | August 31 | Sunday |
+| June 15 | Weekly | September 7 | Sunday |
 
 ## Storage Usage
 

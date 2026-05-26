@@ -123,7 +123,7 @@ The script automatically manages backup retention:
 
 | Backup Type | Retention Period | Example: Backup on |
 |-------------|------------------|-------------------|
-| Weekly      | 12 weeks (84 days) | Most days |
+| Weekly      | 12 weeks (84 days) | Sundays |
 | Monthly     | 12 months (360 days) | 1st of month |
 
 Old backups are automatically deleted when you run the script.

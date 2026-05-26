@@ -281,15 +281,20 @@ def determine_backup_type():
     """
     Determine what type of backup to create based on current date.
     - First day of month: monthly
-    - All other days: weekly
+    - Sunday: weekly
+    - Other days: no automatic backup (must specify --type)
     """
     now = datetime.now()
 
     # First day of month
     if now.day == 1:
         return 'monthly'
-    else:
+    # Sunday (weekday 6)
+    elif now.weekday() == 6:
         return 'weekly'
+    else:
+        # Don't create automatic backups on other days
+        return None
 
 
 def list_backups(backup_dir):
@@ -376,6 +381,13 @@ def main():
 
     # Determine backup type
     backup_type = args.type if args.type else determine_backup_type()
+
+    if backup_type is None:
+        logger.error("❌ No automatic backup scheduled for today.")
+        logger.error("   Automatic backups run on Sundays (weekly) and 1st of month (monthly)")
+        logger.error("   To force a backup, use: python backup_database.py --type weekly")
+        return 1
+
     logger.info(f"Backup type: {backup_type}")
 
     # Create backup

@@ -145,7 +145,7 @@ The current system provides weekly and monthly backups which should be sufficien
 ## Status
 
 ✅ Daily backups: **NOT AVAILABLE**
-✅ Weekly backups: **ENABLED** (at 2 AM)
+✅ Weekly backups: **ENABLED** (Sundays at 2 AM)
 ✅ Monthly backups: **ENABLED** (1st of month at 2 AM)  
 ✅ Auto-cleanup: **ENABLED**  
 ✅ Integrity verification: **ENABLED**  

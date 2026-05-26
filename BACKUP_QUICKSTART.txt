@@ -10,7 +10,9 @@
 
      ./setup_backup.sh
 
-     This installs an automated backup job at 2:00 AM
+     This installs backup jobs:
+     - Weekly backups: Every Sunday at 2:00 AM
+     - Monthly backups: 1st of month at 2:00 AM
 
 ┌──────────────────────────────────────────────────────────────────┐
 │ MANUAL BACKUP COMMANDS                                           │
@@ -69,7 +71,7 @@
 │ RETENTION POLICY                                                 │
 └──────────────────────────────────────────────────────────────────┘
 
-  Weekly:   12 weeks
+  Weekly:   12 weeks (Sundays only)
   Monthly:  12 months (1st of month)
 
 ┌──────────────────────────────────────────────────────────────────┐
