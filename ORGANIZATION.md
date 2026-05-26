@@ -18,6 +18,16 @@ Cruise_Logs/
 ├── 📊 Equipment.xls                    # Acoustic releases data
 ├── 📊 NYLON LENGTHS_MostRecent.xls     # Nylon spools data
 │
+├── 🔄 Database Management
+│   ├── db_version.py                   # Database version tracking
+│   ├── db_sync2.py                     # Database synchronization utility
+│   ├── backup_database.py              # Automated backup system
+│   └── setup_backup.sh                 # Backup automation setup
+│
+├── 🚀 Launchers
+│   ├── launcher.py                     # Cross-platform application launcher
+│   └── admin_launcher.py               # Admin tools launcher
+│
 ├── 📝 Application Files (Python/Streamlit)
 │   ├── cruise_form.py                  # Main cruise information form
 │   ├── dep_form_JSON.py                # Mooring deployment form
@@ -26,8 +36,7 @@ Cruise_Logs/
 │   ├── adcp_dep_form.py                # ADCP deployment form
 │   ├── adcp_rec_form.py                # ADCP recovery form
 │   ├── release_inventory_search.py     # Release inventory search
-│   ├── nylon_inventory_search.py       # Nylon inventory search
-│   └── db_sync2.py                     # Database synchronization utility
+│   └── nylon_inventory_search.py       # Nylon inventory search
 │
 ├── 🔄 Import Scripts
 │   ├── import_release_inventory.py     # Import Equipment.xls
@@ -41,19 +50,33 @@ Cruise_Logs/
 ├── 📖 General Documentation
 │   ├── README_inventories.md           # Inventory systems overview
 │   ├── README_release_inventory.md     # Release inventory details
-│   └── README_nylon_inventory.md       # Nylon inventory details
+│   ├── README_nylon_inventory.md       # Nylon inventory details
+│   ├── BACKUP_QUICKSTART.txt           # Backup quick reference
+│   ├── BACKUP_SETUP.md                 # Complete backup guide
+│   ├── BACKUP_SUMMARY.md               # Backup system summary
+│   ├── WEEKLY_BACKUP_SUMMARY.md        # Weekly backup configuration
+│   ├── DB_VERSION_QUICKSTART.md        # Database version tracking guide
+│   ├── DATABASE_SYNC_WORKFLOW.md       # Database sync workflow
+│   └── LAUNCHER_README.md              # Launcher usage guide
 │
 ├── 🍎 macos/                           # macOS-specific files
 │   ├── README.md                       # macOS quick reference
 │   └── SETUP_MACOS.md                  # Complete macOS setup guide
 │
-└── 🪟 windows/                         # Windows-specific files
-    ├── README.md                       # Windows quick reference
-    ├── SETUP_WINDOWS.md                # Complete Windows setup guide
-    ├── WINDOWS_INSTALL_CHECKLIST.md   # Step-by-step checklist
-    ├── GITHUB_SETUP.md                 # Git repository setup
-    ├── environment_windows.yml         # Conda environment specification
-    └── run_cruise_form.bat             # Windows batch launcher
+├── 🪟 windows/                         # Windows-specific files
+│   ├── README.md                       # Windows quick reference
+│   ├── SETUP_WINDOWS.md                # Complete Windows setup guide
+│   ├── WINDOWS_INSTALL_CHECKLIST.md   # Step-by-step checklist
+│   ├── GITHUB_SETUP.md                 # Git repository setup
+│   ├── environment_windows.yml         # Conda environment specification
+│   ├── install.ps1                     # Automated Windows installer
+│   └── run_cruise_form.bat             # Windows batch launcher
+│
+└── 📂 backups/                         # Backup directory (not in git)
+    ├── weekly/                         # Weekly backups (Sundays, 12 weeks)
+    ├── monthly/                        # Monthly backups (1st, 12 months)
+    ├── latest_weekly.db                # Symlink to latest weekly
+    └── latest_monthly.db               # Symlink to latest monthly
 ```
 
 ## 🎯 Platform-Specific Documentation
@@ -74,8 +97,8 @@ Cruise_Logs/
 
 **Quick Start:**
 ```bash
-cd ~/Github
-git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+cd ~/NOAA-GitHub
+git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
 # Follow macos/SETUP_MACOS.md
 ```
@@ -99,9 +122,11 @@ cd GTMBA-Cruise_Logs
 - Windows-specific troubleshooting
 
 **Quick Start:**
-```cmd
-cd C:\
-git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+```powershell
+# Run the automated installer
+powershell -ExecutionPolicy Bypass -File install.ps1
+# Or clone manually:
+git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
 # Follow windows/SETUP_WINDOWS.md
 ```
@@ -113,8 +138,9 @@ cd GTMBA-Cruise_Logs
 1. **New to the system?** → Read main [`README.md`](README.md)
 2. **Installing on macOS?** → Go to [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
 3. **Installing on Windows?** → Go to [`windows/WINDOWS_INSTALL_CHECKLIST.md`](windows/WINDOWS_INSTALL_CHECKLIST.md)
-4. **Setting up Git?** → See [`windows/GITHUB_SETUP.md`](windows/GITHUB_SETUP.md)
+4. **Setting up backups?** → See [`BACKUP_QUICKSTART.txt`](BACKUP_QUICKSTART.txt)
 5. **Need inventory info?** → Read [`README_inventories.md`](README_inventories.md)
+6. **Using the launcher?** → See [`LAUNCHER_README.md`](LAUNCHER_README.md)
 
 ### Documentation Hierarchy
 
@@ -168,7 +194,9 @@ These files work on **both** macOS and Windows:
 | **Import** | `import_*.py` | Data import scripts |
 | **Config** | `config.py`, `requirements.txt` | Configuration files |
 | **Verification** | `verify_setup.py` | Setup checker |
-| **Sync** | `db_sync2.py` | Remote database sync |
+| **Database Mgmt** | `db_version.py`, `db_sync2.py`, `backup_database.py` | Version, sync, backup |
+| **Launchers** | `launcher.py`, `admin_launcher.py` | Application launchers |
+| **Backup Setup** | `setup_backup.sh` | Automated backup configuration |
 | **Git** | `.gitignore` | Git configuration |
 
 ### macOS Directory
@@ -185,9 +213,19 @@ These files work on **both** macOS and Windows:
 | `SETUP_WINDOWS.md` | Complete Windows installation guide |
 | `WINDOWS_INSTALL_CHECKLIST.md` | Step-by-step checklist |
 | `GITHUB_SETUP.md` | Git and GitHub setup |
+| `install.ps1` | Automated Windows installer |
 | `environment_windows.yml` | Conda environment file |
 | `run_cruise_form.bat` | Batch launcher script |
 | `README.md` | Quick start for Windows users |
+
+### Backup Documentation
+
+| File | Purpose |
+|------|---------|
+| `BACKUP_QUICKSTART.txt` | Quick reference for backup commands |
+| `BACKUP_SETUP.md` | Complete backup system guide |
+| `BACKUP_SUMMARY.md` | Backup system overview |
+| `WEEKLY_BACKUP_SUMMARY.md` | Weekly backup configuration details |
 
 ## 🚀 Typical Workflows
 
@@ -205,13 +243,20 @@ These files work on **both** macOS and Windows:
 5. Start using applications
 
 ### Daily Usage (Any Platform)
-1. Activate environment: `conda activate cruise_logs`
+1. Use the launcher: `python launcher.py`
+   - Or activate environment: `conda activate cruise_logs`
 2. Navigate to repository
 3. Run desired application: `streamlit run cruise_form.py`
 
 ### Updating Repository (Any Platform)
 1. `git pull origin main`
 2. `pip install --upgrade -r requirements.txt`
+
+### Setting Up Backups (macOS/Linux)
+1. Run: `./setup_backup.sh`
+2. Backups run automatically:
+   - Sundays at 2 AM (weekly, kept 12 weeks)
+   - 1st of month at 2 AM (monthly, kept 12 months)
 
 ## 🔍 Finding What You Need
 
@@ -221,8 +266,8 @@ These files work on **both** macOS and Windows:
 ### "I need to install on macOS"
 → [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
 
-### "How do I clone the repository?"
-→ [`windows/GITHUB_SETUP.md`](windows/GITHUB_SETUP.md) (works for both platforms)
+### "How do I set up backups?"
+→ [`BACKUP_QUICKSTART.txt`](BACKUP_QUICKSTART.txt) or [`BACKUP_SETUP.md`](BACKUP_SETUP.md)
 
 ### "What is this system?"
 → Main [`README.md`](README.md)
@@ -232,6 +277,12 @@ These files work on **both** macOS and Windows:
 
 ### "Something isn't working"
 → Run `verify_setup.py` and check platform-specific SETUP guide
+
+### "I want to use the launcher"
+→ [`LAUNCHER_README.md`](LAUNCHER_README.md)
+
+### "How do I track database versions?"
+→ [`DB_VERSION_QUICKSTART.md`](DB_VERSION_QUICKSTART.md)
 
 ### "I want to create a shortcut (Windows)"
 → [`windows/SETUP_WINDOWS.md`](windows/SETUP_WINDOWS.md) - Section on shortcuts
@@ -259,7 +310,9 @@ These files work on **both** macOS and Windows:
 - ❌ OS files (`.DS_Store`, `Thumbs.db`)
 - ❌ SQLite temporary files (`*.db-journal`)
 - ❌ Excel temporary files (`~$*.xls`)
-- ❌ Log files
+- ❌ Log files (`backup.log`, etc.)
+- ❌ Backup files (`backups/` directory)
+- ❌ Import staging (`imports/` directory)
 
 ## 🎓 Best Practices
 
@@ -296,5 +349,9 @@ Cruise_Logs/
 
 ---
 
-**Last Updated:** January 2025  
+**Note on Authentication:** This repository uses HTTPS with 2FA (Google Authenticator) for GitHub authentication. SSH keys are not required.
+
+---
+
+**Last Updated:** May 2026
 **Repository:** https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs
