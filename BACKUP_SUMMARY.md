@@ -130,8 +130,7 @@ Expected total backup storage:
 To also backup to a remote server (like spectrum.pmel.noaa.gov):
 
 1. Edit `config.py` and update the `SYNC_CONFIG` section
-2. Set up SSH key authentication
-3. Run: `python backup_database.py --remote`
+2. Run: `python backup_database.py --remote`
 4. Update the automated job to use `--remote` flag
 
 See `BACKUP_SETUP.md` for detailed instructions.

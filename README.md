@@ -255,7 +255,6 @@ Follow the comprehensive guide in **[windows/SETUP_WINDOWS.md](windows/SETUP_WIN
 See **[windows/GITHUB_SETUP.md](windows/GITHUB_SETUP.md)** for instructions on:
 
 - Creating a new repository
-- Configuring SSH keys
 - Managing branches
 - Syncing between machines
 
@@ -377,7 +376,7 @@ python db_sync2.py --push
 python db_sync2.py
 ```
 
-Requires SSH key authentication for user `lake`.
+Requires GitHub authentication (HTTPS with 2FA).
 
 ## Development
 

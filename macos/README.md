@@ -56,7 +56,6 @@ Complete macOS setup guide including:
 - Terminal aliases and shortcuts
 - Database synchronization
 - Troubleshooting for macOS-specific issues
-- SSH key setup for GitHub
 
 ## 🎯 Default Configuration
 
@@ -157,7 +156,7 @@ streamlit run nylon_inventory_search.py    # 1,723 nylon spools
 
 ## 🔄 Database Sync
 
-Sync with remote server (requires SSH access):
+Sync with remote server (requires GitHub authentication):
 ```bash
 python db_sync2.py --status    # Check sync status
 python db_sync2.py --pull      # Download from remote
@@ -217,22 +216,10 @@ Tested on:
 
 Works on both Intel and Apple Silicon (M1/M2/M3) Macs.
 
-## 🔐 SSH Setup for GitHub
+## 🔐 GitHub Authentication
 
-```bash
-# Generate SSH key
-ssh-keygen -t ed25519 -C "your_email@example.com"
-
-# Add to ssh-agent
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-
-# Copy public key to clipboard
-pbcopy < ~/.ssh/id_ed25519.pub
-
-# Add to GitHub → Settings → SSH and GPG keys
-# Test: ssh -T git@github.com
-```
+The repository uses HTTPS with 2FA (Google Authenticator) for authentication.
+You'll be prompted to authenticate when pushing changes to GitHub.
 
 ## 📊 System Requirements
 

@@ -142,13 +142,7 @@ To enable remote backups via rsync:
    }
    ```
 
-2. **Set up SSH key authentication** (recommended):
-   ```bash
-   ssh-keygen -t rsa -b 4096
-   ssh-copy-id your-username@your-server.example.com
-   ```
-
-3. **Test remote sync**:
+2. **Test remote sync**:
    ```bash
    python backup_database.py --remote
    ```
@@ -250,7 +244,7 @@ chmod +x backup_database.py
 
 - Backups contain sensitive cruise data
 - Ensure backup directory has proper permissions (700)
-- Use encrypted connections for remote sync (SSH)
+- Use encrypted connections for remote sync
 - Store remote backups on NOAA-approved servers only
 
 ## Storage Requirements

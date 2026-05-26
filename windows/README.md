@@ -5,7 +5,7 @@ Complete guide for installing and configuring the Cruise_Logs system on Windows.
 ## Table of Contents
 
 - [Quick Install](#quick-install)
-- [Setup GitHub SSH (Optional)](#setup-github-ssh-optional)
+- [GitHub Authentication](#github-authentication)
 - [Troubleshooting](#troubleshooting)
 - [Daily Usage](#daily-usage)
 
@@ -50,88 +50,28 @@ Complete guide for installing and configuring the Cruise_Logs system on Windows.
 
 ---
 
-## Setup GitHub SSH (Optional)
+## GitHub Authentication
 
-**When to do this:** After initial installation, if you want to push/pull changes to GitHub.
+**When to do this:** When you need to push changes to GitHub.
 
-**Why SSH:** By default, the repository is installed using HTTPS (easy for everyone). If you want to sync your work back to GitHub, you'll need SSH authentication set up.
+The repository uses **HTTPS with 2FA** (Google Authenticator) for authentication.
 
-### Automated Setup (Recommended)
+### How It Works
 
-Run the SSH setup script:
+1. When you push changes, GitHub will prompt for authentication
+2. Use your GitHub username and authenticate with Google Authenticator
+3. Git can cache your credentials so you don't need to authenticate every time
 
-```powershell
-cd C:\Cruise_Logs\windows
-powershell -ExecutionPolicy Bypass -File setup_github_ssh.ps1
-```
+### Enable Credential Caching (Optional)
 
-This script will:
-1. ✓ Check for existing SSH keys or help you generate new ones
-2. ✓ Guide you through adding the key to GitHub
-3. ✓ Test the SSH connection
-4. ✓ Convert your repository from HTTPS to SSH
-
-### Manual Setup
-
-If you prefer to set up SSH manually:
-
-#### 1. Generate SSH Key
-
-```powershell
-ssh-keygen -t ed25519 -C "your_email@example.com"
-```
-
-Press Enter to accept the default location, and optionally enter a passphrase.
-
-#### 2. Start SSH Agent
-
-```powershell
-# Start the ssh-agent service
-Start-Service ssh-agent
-
-# Add your key
-ssh-add $env:USERPROFILE\.ssh\id_ed25519
-```
-
-#### 3. Copy Public Key
-
-```powershell
-# Copy public key to clipboard
-Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub | Set-Clipboard
-```
-
-#### 4. Add to GitHub
-
-1. Go to: https://github.com/settings/keys
-2. Click "New SSH key"
-3. Give it a title (e.g., "Work Laptop")
-4. Paste your key (already in clipboard)
-5. Click "Add SSH key"
-
-#### 5. Test Connection
-
-```powershell
-ssh -T git@github.com
-```
-
-You should see: "Hi username! You've successfully authenticated..."
-
-#### 6. Convert Repository to SSH
+To avoid entering credentials repeatedly:
 
 ```powershell
 cd C:\Cruise_Logs
-git remote set-url origin git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+git config credential.helper store
 ```
 
-#### 7. Verify
-
-```powershell
-git remote get-url origin
-# Should show: git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
-
-git fetch origin
-# Should work without asking for password
-```
+After the first successful push, Git will remember your credentials.
 
 ---
 
@@ -172,7 +112,7 @@ dir install.ps1  # verify it exists
 - If truly stuck, press `Ctrl+C` and run again
 - Check your internet connection
 
-### SSH Setup Issues
+### GitHub Authentication Issues
 
 #### Error: "Could not resolve host: github.com"
 **Causes:**
@@ -186,27 +126,16 @@ dir install.ps1  # verify it exists
 3. Check firewall settings
 4. If on corporate network, talk to IT about GitHub access
 
-#### Error: "Permission denied (publickey)"
+#### Error: "Authentication failed"
 **Causes:**
-- SSH key not added to GitHub
-- ssh-agent not running
-- Wrong key being used
+- Incorrect credentials
+- 2FA not completed
+- Credentials not cached
 
 **Solution:**
-1. Make sure you added key to GitHub: https://github.com/settings/keys
-2. Start ssh-agent: `Start-Service ssh-agent`
-3. Add your key: `ssh-add $env:USERPROFILE\.ssh\id_ed25519`
-4. Test: `ssh -T git@github.com`
-
-#### Error: "Could not open a connection to your authentication agent"
-**Solution:**
-```powershell
-# Start the agent
-Start-Service ssh-agent
-
-# Add your key
-ssh-add $env:USERPROFILE\.ssh\id_ed25519
-```
+1. Make sure you're using your GitHub username (not email)
+2. Complete 2FA authentication with Google Authenticator
+3. Enable credential caching (see GitHub Authentication section above)
 
 ### Application Issues
 
@@ -263,7 +192,7 @@ Press `Ctrl+C` in the PowerShell window, or just close the window.
 
 ---
 
-## Git Operations (After SSH Setup)
+## Git Operations
 
 ### Pull Latest Changes
 
@@ -293,8 +222,7 @@ git status
 ```powershell
 cd C:\Cruise_Logs
 git remote get-url origin
-# HTTPS: https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
-# SSH:   git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
+# Should show: https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 ```
 
 ---
