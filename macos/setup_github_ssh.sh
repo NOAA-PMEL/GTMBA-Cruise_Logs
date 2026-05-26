@@ -224,7 +224,7 @@ echo ""
 
 repo_path=""
 possible_paths=(
-    "$HOME/Github/GTMBA-Cruise_Logs"
+    "$HOME/NOAA-GitHub/GTMBA-Cruise_Logs"
     "$HOME/Documents/Cruise_Logs"
     "$HOME/Cruise_Logs"
     "$(pwd)"

@@ -52,7 +52,7 @@ Before starting work, pull the latest database from GitHub:
 ```bash
 cd C:\Cruise_Logs  # Windows
 # or
-cd ~/Github/GTMBA-Cruise_Logs  # macOS
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs  # macOS
 
 # Pull latest changes
 git pull origin main
@@ -278,7 +278,7 @@ pause
 
 ```bash
 #!/bin/bash
-cd ~/Github/GTMBA-Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 
 echo "Checking database version..."
 python db_version.py --check

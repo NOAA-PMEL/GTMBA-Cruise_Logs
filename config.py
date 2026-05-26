@@ -38,8 +38,8 @@ def get_database_path():
             fallback_path = r'C:\Cruise_Logs\Cruise_Logs.db'
         else:
             # Mac/Linux: Use expanduser for home directory
-            # Assumes ~/Github/Cruise_Logs/Cruise_Logs.db
-            fallback_path = os.path.expanduser('~/Github/Cruise_Logs/Cruise_Logs.db')
+            # Assumes ~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db
+            fallback_path = os.path.expanduser('~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db')
 
         if os.path.exists(fallback_path):
             db_path = fallback_path

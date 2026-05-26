@@ -51,7 +51,7 @@ class SQLiteSyncSSH:
         """
         # Default configuration for user 'lake' on spectrum
         default_config = {
-            'local_db': os.path.expanduser('~/Github/Cruise_Logs/Cruise_Logs.db'),
+            'local_db': os.path.expanduser('~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db'),
             'remote_host': 'spectrum.pmel.noaa.gov',
             'remote_user': 'lake',
             'remote_dir': '/home/spectrum/lake/database',

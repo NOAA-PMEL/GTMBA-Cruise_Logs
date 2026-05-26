@@ -62,7 +62,7 @@ powershell -ExecutionPolicy Bypass -File setup_github_ssh.ps1 -Email "your.email
 Open Terminal and run:
 
 ```bash
-cd ~/Cruise_Logs/macos
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs/macos
 bash setup_github_ssh.sh
 ```
 
@@ -168,7 +168,7 @@ If you already have an SSH key:
 
 **Solution**:
 ```bash
-chmod +x ~/Cruise_Logs/macos/setup_github_ssh.sh
+chmod +x ~/NOAA-GitHub/GTMBA-Cruise_Logs/macos/setup_github_ssh.sh
 ```
 
 ## Security Notes

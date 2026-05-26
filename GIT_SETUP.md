@@ -67,7 +67,7 @@ powershell -ExecutionPolicy Bypass -File setup_github_ssh.ps1
 #### macOS/Linux
 
 ```bash
-cd ~/Github/GTMBA-Cruise_Logs/macos
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs/macos
 bash setup_github_ssh.sh
 ```
 
@@ -105,7 +105,7 @@ git remote get-url origin
 
 **macOS:**
 ```bash
-cd ~/Github/GTMBA-Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 git remote get-url origin
 ```
 

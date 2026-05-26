@@ -27,7 +27,7 @@ This directory contains macOS-specific documentation and configuration files for
 brew install git
 
 # Clone repository
-cd ~/Github
+cd ~/NOAA-GitHub
 git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
 
@@ -61,10 +61,10 @@ Complete macOS setup guide including:
 ## 🎯 Default Configuration
 
 The repository is configured with these default paths for macOS:
-- **Installation:** `~/Github/Cruise_Logs`
-- **Database:** `~/Github/Cruise_Logs/Cruise_Logs.db`
+- **Installation:** `~/NOAA-GitHub/GTMBA-Cruise_Logs`
+- **Database:** `~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db`
 
-Most Python files already use `os.path.expanduser()` so they should work automatically if you clone to `~/Github/Cruise_Logs`.
+Most Python files already use `os.path.expanduser()` so they should work automatically if you clone to `~/NOAA-GitHub/GTMBA-Cruise_Logs`.
 
 ## 🔧 Path Configuration
 
@@ -82,8 +82,8 @@ from config import DB_PATH
 ### Terminal Aliases
 Add to `~/.zshrc` (or `~/.bash_profile` for older macOS):
 ```bash
-alias cruise-form='cd ~/Github/Cruise_Logs && conda activate cruise_logs && streamlit run cruise_form.py'
-alias cruise-releases='cd ~/Github/Cruise_Logs && conda activate cruise_logs && streamlit run release_inventory_search.py'
+alias cruise-form='cd ~/NOAA-GitHub/GTMBA-Cruise_Logs && conda activate cruise_logs && streamlit run cruise_form.py'
+alias cruise-releases='cd ~/NOAA-GitHub/GTMBA-Cruise_Logs && conda activate cruise_logs && streamlit run release_inventory_search.py'
 ```
 
 ### Automator App
@@ -92,7 +92,7 @@ Create a clickable app using macOS Automator - see SETUP_MACOS.md for instructio
 ### Shell Script Launcher
 ```bash
 #!/bin/bash
-cd ~/Github/Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 conda activate cruise_logs
 streamlit run cruise_form.py
 ```
@@ -117,7 +117,7 @@ pip install -r requirements.txt
 
 ```bash
 # Navigate to repository
-cd ~/Github/Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 
 # Activate environment
 conda activate cruise_logs
@@ -138,7 +138,7 @@ This checks:
 ```bash
 # Always start by activating environment
 conda activate cruise_logs
-cd ~/Github/Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 
 # Main forms
 streamlit run cruise_form.py          # Cruise information

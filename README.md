@@ -33,7 +33,7 @@ All data is stored in a SQLite database (`Cruise_Logs.db`) for version control.
 
 ```bash
 # Clone repository
-cd ~/Github
+cd ~/NOAA-GitHub
 git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
 

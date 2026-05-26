@@ -37,8 +37,8 @@ git --version
 ### 3. Clone the Repository
 
 ```bash
-# Navigate to your Github directory
-cd ~/Github
+# Navigate to your NOAA-GitHub directory
+cd ~/NOAA-GitHub
 
 # Clone the repository
 git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
@@ -101,11 +101,11 @@ ls -lh Cruise_Logs.db
 
 ### 6. Configure Paths
 
-The default configuration should work for macOS if you cloned to `~/Github/Cruise_Logs`.
+The default configuration should work for macOS if you cloned to `~/NOAA-GitHub/GTMBA-Cruise_Logs`.
 
 **Current default paths in the code:**
-- `~/Github/Cruise_Logs/Cruise_Logs.db`
-- `/Users/lake/Github/Cruise_Logs/Cruise_Logs.db`
+- `~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db`
+- `/Users/lake/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db`
 
 **If you cloned to a different location**, update these files:
 
@@ -114,28 +114,28 @@ The default configuration should work for macOS if you cloned to `~/Github/Cruis
 **1. `adcp_dep_form.py`** (Line 9)
 ```python
 # Change from:
-DB_PATH = '/Users/lake/Github/Cruise_Logs/Cruise_Logs.db'
+DB_PATH = '/Users/lake/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db'
 
 # To your path:
-DB_PATH = os.path.expanduser('~/Github/Cruise_Logs/Cruise_Logs.db')
+DB_PATH = os.path.expanduser('~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db')
 ```
 
 **2. `cruise_form.py`** (Line 8)
 ```python
 # Already uses expanduser, should work automatically
-DB_PATH = os.path.expanduser("~/Github/Cruise_Logs/Cruise_Logs.db")
+DB_PATH = os.path.expanduser("~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db")
 ```
 
 **3. `rec_form_JSON.py`** (Line 11)
 ```python
 # Already uses expanduser, should work automatically
-DB_PATH = os.path.expanduser("~/Github/Cruise_Logs/Cruise_Logs.db")
+DB_PATH = os.path.expanduser("~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db")
 ```
 
 **4. `repair_form_JSON.py`** (Line 10)
 ```python
 # Already uses expanduser, should work automatically
-DB_PATH = os.path.expanduser("~/Github/Cruise_Logs/Cruise_Logs.db")
+DB_PATH = os.path.expanduser("~/NOAA-GitHub/GTMBA-Cruise_Logs/Cruise_Logs.db")
 ```
 
 **Better Solution:** Use the cross-platform `config.py` module:
@@ -220,7 +220,7 @@ conda activate cruise_logs
 # or: source venv/bin/activate
 
 # Navigate to repository
-cd ~/Github/Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 
 # Run main cruise form
 streamlit run cruise_form.py
@@ -257,10 +257,10 @@ Add to your `~/.zshrc` or `~/.bash_profile`:
 
 ```bash
 # Cruise Logs aliases
-alias cruise-form='cd ~/Github/Cruise_Logs && conda activate cruise_logs && streamlit run cruise_form.py'
-alias cruise-deploy='cd ~/Github/Cruise_Logs && conda activate cruise_logs && streamlit run dep_form_JSON.py'
-alias cruise-recover='cd ~/Github/Cruise_Logs && conda activate cruise_logs && streamlit run rec_form_JSON.py'
-alias cruise-releases='cd ~/Github/Cruise_Logs && conda activate cruise_logs && streamlit run release_inventory_search.py'
+alias cruise-form='cd ~/NOAA-GitHub/GTMBA-Cruise_Logs && conda activate cruise_logs && streamlit run cruise_form.py'
+alias cruise-deploy='cd ~/NOAA-GitHub/GTMBA-Cruise_Logs && conda activate cruise_logs && streamlit run dep_form_JSON.py'
+alias cruise-recover='cd ~/NOAA-GitHub/GTMBA-Cruise_Logs && conda activate cruise_logs && streamlit run rec_form_JSON.py'
+alias cruise-releases='cd ~/NOAA-GitHub/GTMBA-Cruise_Logs && conda activate cruise_logs && streamlit run release_inventory_search.py'
 ```
 
 Reload your shell:
@@ -276,7 +276,7 @@ Create `~/cruise_logs.sh`:
 
 ```bash
 #!/bin/bash
-cd ~/Github/Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 source ~/anaconda3/bin/activate cruise_logs
 streamlit run cruise_form.py
 ```
@@ -296,7 +296,7 @@ Run with: `~/cruise_logs.sh`
 4. Enter:
    ```bash
    source ~/anaconda3/bin/activate cruise_logs
-   cd ~/Github/Cruise_Logs
+   cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
    streamlit run cruise_form.py
    ```
 5. Save as "Cruise Logs.app" to Applications folder
@@ -415,7 +415,7 @@ streamlit run cruise_form.py --server.address 0.0.0.0
 ## Updating the Repository
 
 ```bash
-cd ~/Github/Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 
 # Pull latest code
 git pull origin main
@@ -453,7 +453,7 @@ conda update --all
 After installation, run the SSH setup script to convert from HTTPS to SSH:
 
 ```bash
-cd ~/Github/GTMBA-Cruise_Logs/macos
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs/macos
 bash setup_github_ssh.sh
 ```
 
@@ -541,7 +541,7 @@ cp Cruise_Logs.db "Cruise_Logs_backup_$(date +%Y%m%d_%H%M%S).db"
 sqlite3 Cruise_Logs.db ".backup 'backup.db'"
 
 # Backup to Time Machine
-# (ensure ~/Github/Cruise_Logs is included)
+# (ensure ~/NOAA-GitHub/GTMBA-Cruise_Logs is included)
 ```
 
 ### Git Backups
@@ -557,7 +557,7 @@ git push origin main
 
 ```bash
 # Start workflow
-cd ~/Github/Cruise_Logs
+cd ~/NOAA-GitHub/GTMBA-Cruise_Logs
 conda activate cruise_logs
 streamlit run cruise_form.py
 
