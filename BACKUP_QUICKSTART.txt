@@ -1,0 +1,99 @@
+╔══════════════════════════════════════════════════════════════════╗
+║        CRUISE_LOGS DATABASE BACKUP - QUICK REFERENCE             ║
+╚══════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────┐
+│ INITIAL SETUP (One-time)                                         │
+└──────────────────────────────────────────────────────────────────┘
+
+  1. Set up automated backups:
+
+     ./setup_backup.sh
+
+     This installs an automated backup job at 2:00 AM
+
+┌──────────────────────────────────────────────────────────────────┐
+│ MANUAL BACKUP COMMANDS                                           │
+└──────────────────────────────────────────────────────────────────┘
+
+  Create backup now:
+    python backup_database.py
+
+  Create backup and sync to remote:
+    python backup_database.py --remote
+
+  List all backups:
+    python backup_database.py --list
+
+  Verify backup integrity:
+    python backup_database.py --verify-only
+
+┌──────────────────────────────────────────────────────────────────┐
+│ MONITORING                                                       │
+└──────────────────────────────────────────────────────────────────┘
+
+  View backup log:
+    tail -f backup.log
+
+  Check last 20 log entries:
+    tail -20 backup.log
+
+  Check backup directory size:
+    du -sh backups/
+
+┌──────────────────────────────────────────────────────────────────┐
+│ RESTORATION                                                      │
+└──────────────────────────────────────────────────────────────────┘
+
+  Restore from latest backup:
+    cp backups/latest_weekly.db Cruise_Logs.db
+
+  Restore from specific backup:
+    cp backups/weekly/Cruise_Logs_backup_YYYYMMDD_HHMMSS.db Cruise_Logs.db
+
+  Test backup before restoring:
+    sqlite3 backups/latest_weekly.db "SELECT COUNT(*) FROM deployments_normalized;"
+
+┌──────────────────────────────────────────────────────────────────┐
+│ BACKUP LOCATIONS                                                 │
+└──────────────────────────────────────────────────────────────────┘
+
+  Weekly backups:    backups/weekly/
+  Monthly backups:   backups/monthly/
+
+  Latest links:
+    backups/latest_weekly.db
+    backups/latest_monthly.db
+
+┌──────────────────────────────────────────────────────────────────┐
+│ RETENTION POLICY                                                 │
+└──────────────────────────────────────────────────────────────────┘
+
+  Weekly:   12 weeks
+  Monthly:  12 months (1st of month)
+
+┌──────────────────────────────────────────────────────────────────┐
+│ TROUBLESHOOTING                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+  Check if automated backup is installed:
+    launchctl list | grep cruiselogs    (macOS)
+    crontab -l                          (Linux)
+
+  Manually clean up old backups:
+    python backup_database.py --cleanup-only
+
+  Re-run setup:
+    ./setup_backup.sh
+
+┌──────────────────────────────────────────────────────────────────┐
+│ IMPORTANT NOTES                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+  • All backups are verified for integrity
+  • Database is verified BEFORE backup (prevents backing up corrupt data)
+  • Old backups are automatically cleaned up
+  • Symlinks always point to latest backup
+  • Total storage needed: ~720 MB
+
+For detailed documentation, see BACKUP_SETUP.md
