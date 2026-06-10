@@ -5,32 +5,24 @@ This guide will help you set up the Cruise_Logs repository on a macOS system.
 ## Prerequisites
 
 - **macOS** 10.15 (Catalina) or later
-- **Homebrew** package manager (recommended)
-- **Git**
+- **Xcode Command Line Tools** (includes Git)
 - **Python** 3.9 or higher (Anaconda recommended, or system Python with venv)
 - **GitHub account** with repository access
 
 ## Installation Steps
 
-### 1. Install Homebrew (if not already installed)
+### 1. Install Xcode Command Line Tools
 
-Homebrew is the recommended package manager for macOS.
-
-```bash
-# Install Homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Verify installation
-brew --version
-```
-
-### 2. Install Git
+Xcode Command Line Tools includes Git and other essential development tools.
 
 ```bash
-# Install Git (if not already installed)
-brew install git
+# Install Xcode Command Line Tools
+xcode-select --install
 
-# Verify installation
+# This will open a dialog to install the tools
+# Accept the license and wait for installation to complete
+
+# Verify Git installation
 git --version
 ```
 
@@ -55,11 +47,14 @@ cd GTMBA-Cruise_Logs
 #### Option A: Using Anaconda (Recommended)
 
 ```bash
-# Install Anaconda (if not already installed)
-brew install --cask anaconda
+# Download and install Anaconda from:
+# https://www.anaconda.com/download
 
-# Add conda to your PATH (if needed)
+# After installation, add conda to your PATH (if needed)
 export PATH="/usr/local/anaconda3/bin:$PATH"
+
+# Or for Apple Silicon Macs:
+export PATH="$HOME/anaconda3/bin:$PATH"
 
 # Create conda environment
 conda create -n cruise_logs python=3.11 -y
@@ -333,7 +328,7 @@ python db_sync2.py
 export PATH="/usr/local/anaconda3/bin:$PATH"
 
 # Or if using Apple Silicon Mac:
-export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+export PATH="$HOME/anaconda3/bin:$PATH"
 
 # Reload shell
 source ~/.zshrc
@@ -378,15 +373,18 @@ pip install xlrd openpyxl
 xcode-select --install
 ```
 
-### Issue: Homebrew not working on Apple Silicon
+### Issue: Anaconda not found on Apple Silicon
 
-**Solution:** Use correct path
+**Solution:** Use correct path for Apple Silicon
 ```bash
-# Apple Silicon (M1/M2/M3)
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Apple Silicon (M1/M2/M3) - add to ~/.zshrc
+export PATH="$HOME/anaconda3/bin:$PATH"
 
-# Intel Macs
-eval "$(/usr/local/bin/brew shellenv)"
+# Intel Macs - add to ~/.zshrc
+export PATH="/usr/local/anaconda3/bin:$PATH"
+
+# Reload shell
+source ~/.zshrc
 ```
 
 ## macOS-Specific Notes

@@ -1,0 +1,26 @@
+- You must be Windows Administrator to install Cruise_Logs database
+
+- Download and install Anaconda for Windows - https://www.anaconda.com/download
+  (you may have to register).  Install for all users, accept further default options.
+
+- Download and install Git Bash for windows - https://git-scm.com/install/windows, 
+  Accept all defaults.
+
+- Copy the attached file install.pxx to home directory and rename to install.ps1.
+
+- Open PowerShell as administrator (right click the icon and select "run as admin")
+
+- cd to your home directory in PowerShell and run this command:
+	
+  powershell -ExecutionPolicy Bypass -File install.ps1
+
+- Follow the propts, answer yes to everything.
+
+- 2 desktop icons will be created.  Double-click the Cruise_Logs-Launcher (the other, 
+  Cruise Logs -Main Form, is just a test)
+
+- Click on one of the forms in the menu.  A pop-up window will ask permission to run python,
+  answer yes.
+
+-Should be good to go.  Please check out forms and provide comments.
+

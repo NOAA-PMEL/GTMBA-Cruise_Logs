@@ -6,25 +6,24 @@ This directory contains macOS-specific documentation and configuration files for
 
 | File | Description |
 |------|-------------|
-| **SETUP_MACOS.md** | Comprehensive macOS installation guide with Homebrew, Anaconda, and troubleshooting |
+| **SETUP_MACOS.md** | Comprehensive macOS installation guide with Anaconda and troubleshooting |
 | **README.md** | This file |
 
 ## 🚀 Quick Start for macOS Installation
 
 ### 1. Prerequisites
 - macOS 10.15 (Catalina) or later
-- Homebrew package manager (recommended)
-- Git
+- Xcode Command Line Tools (includes Git)
 - Python 3.9+ (Anaconda or venv)
 
 ### 2. Installation Steps
 
 ```bash
-# Install Homebrew (if needed)
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Install Xcode Command Line Tools (includes Git)
+xcode-select --install
 
-# Install Git
-brew install git
+# Verify Git installation
+git --version
 
 # Clone repository
 cd ~/NOAA-GitHub
@@ -49,8 +48,7 @@ streamlit run cruise_form.py
 
 ### SETUP_MACOS.md
 Complete macOS setup guide including:
-- Homebrew installation
-- Git setup
+- Git setup via Xcode Command Line Tools
 - Python environment (Anaconda or venv)
 - Database configuration
 - Terminal aliases and shortcuts
@@ -180,8 +178,9 @@ lsof -ti:8501 | xargs kill
 
 ### Python version too old
 ```bash
-# Install newer Python via Homebrew
-brew install python@3.11
+# Download and install Python from python.org
+# Visit: https://www.python.org/downloads/macos/
+# Or install Anaconda which includes Python 3.11
 ```
 
 See **SETUP_MACOS.md** for comprehensive troubleshooting.
