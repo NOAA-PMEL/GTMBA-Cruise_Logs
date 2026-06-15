@@ -953,7 +953,7 @@ def main():
     """, unsafe_allow_html=True)
 
     # Main title
-    st.title("GTMBA Deployment Log (JSON Normalized)")
+    st.title("GTMBA Deployment Log")
 
     # Database table will be checked during first search operation
 

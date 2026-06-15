@@ -1841,7 +1841,7 @@ def save_recovery_data(form_data):
 def main():
     # Page configuration
     st.set_page_config(
-        page_title="GTMBA Recovery Log (Normalized)",
+        page_title="GTMBA Recovery Log",
         page_icon="⚓",
         layout="wide",
         initial_sidebar_state="collapsed"
