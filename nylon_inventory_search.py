@@ -85,9 +85,13 @@ if st.checkbox("Show All Inventory"):
         with col1:
             st.metric("Total Spools", len(df_all))
         with col2:
-            st.metric("Total Length", f"{df_all['Length_m'].sum():,.0f} m")
+            # Convert to numeric, handling any non-numeric values
+            total_length = pd.to_numeric(df_all['Length_m'], errors='coerce').sum()
+            st.metric("Total Length", f"{total_length:,.0f} m")
         with col3:
-            st.metric("Average Length", f"{df_all['Length_m'].mean():.1f} m")
+            # Convert to numeric, handling any non-numeric values
+            avg_length = pd.to_numeric(df_all['Length_m'], errors='coerce').mean()
+            st.metric("Average Length", f"{avg_length:.1f} m")
 
     except Exception as e:
         st.error(f"Error loading inventory: {e}")
