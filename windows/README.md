@@ -2,19 +2,47 @@
 
 Complete guide for installing and configuring the Cruise_Logs system on Windows.
 
+## Installation Options
+
+**Choose your installation type:**
+
+- **User Installation** (Recommended for office users, managers) - [QUICKSTART_USER.md](QUICKSTART_USER.md)
+  - No admin privileges required
+  - Installs to `C:\Users\YourName\Cruise_Logs`
+  - Perfect for individual users
+  
+- **Field Laptop Installation** (For shared field computers) - See below
+  - Installs to `C:\Cruise_Logs`
+  - Recommended to have admin access
+  - Shared machine setup
+
 ## Table of Contents
 
-- [Quick Install](#quick-install)
+- [Quick Install (Field Laptops)](#quick-install)
+- [User Installation](#user-installation)
 - [GitHub Authentication](#github-authentication)
 - [Troubleshooting](#troubleshooting)
 - [Daily Usage](#daily-usage)
 
-## Quick Install
+## User Installation
+
+👉 **Most users should follow the [QUICKSTART_USER.md](QUICKSTART_USER.md) guide!**
+
+Quick summary:
+1. Run `INSTALL_USER.bat` or `install_user.ps1`
+2. No admin required
+3. Installs to your user folder
+
+See [QUICKSTART_USER.md](QUICKSTART_USER.md) for detailed instructions.
+
+---
+
+## Quick Install (Field Laptops)
 
 ### Prerequisites
 
 - **Windows 10** or Windows 11
-- **Administrator access**
+- **Administrator access** (recommended)
 - **Internet connection**
 
 ### Installation Steps
@@ -283,8 +311,16 @@ If you need to modify paths, edit these files:
 
 ## Additional Resources
 
+### For Users
+- **User Quick Start:** `QUICKSTART_USER.md`
+- **User Instructions:** `INSTALL_INSTRUCTIONS_USER.txt`
+- **Installation Overview:** `USER_INSTALLATION_FILES.md`
+
+### For Field Laptops
 - **Installation Command Reference:** `INSTALL_COMMAND.txt`
 - **Field Deployment Guide:** `FIELD_DEPLOYMENT_GUIDE.md` (if available)
+
+### General
 - **Main README:** `../README.md`
 - **GitHub Issues:** https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs/issues
 

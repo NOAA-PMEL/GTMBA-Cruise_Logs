@@ -46,6 +46,23 @@ streamlit run cruise_form.py
 
 ### Windows
 
+**Automated Installation (Recommended)**
+
+**For field laptops** (installs to `C:\Cruise_Logs`):
+```powershell
+powershell -ExecutionPolicy Bypass -File windows\install.ps1
+```
+
+**For user installation** (installs to `C:\Users\YourName\Cruise_Logs`, no admin required):
+```powershell
+powershell -ExecutionPolicy Bypass -File windows\install_user.ps1
+```
+
+📖 See **[windows/QUICKSTART_USER.md](windows/QUICKSTART_USER.md)** for user installation guide  
+📖 See **[windows/FIELD_DEPLOYMENT_GUIDE.md](windows/FIELD_DEPLOYMENT_GUIDE.md)** for field laptop setup
+
+**Manual Installation**
+
 ```cmd
 # Clone repository
 cd C:\
@@ -62,8 +79,6 @@ pip install -r requirements.txt
 # Run main form
 streamlit run cruise_form.py
 ```
-
-See **[SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)** for detailed Windows installation instructions.
 
 ## System Requirements
 

@@ -1,0 +1,105 @@
+================================================================================
+           CRUISE LOGS - USER INSTALLATION INSTRUCTIONS
+================================================================================
+
+QUICK INSTALL (5-10 minutes)
+No administrator privileges required!
+
+--------------------------------------------------------------------------------
+BEFORE YOU START
+--------------------------------------------------------------------------------
+
+Install these two programs first (if you don't have them):
+
+1. Anaconda (Python)
+   Download: https://www.anaconda.com/download/
+   Install for: "Just Me" (recommended)
+
+2. Git (Version Control)
+   Download: https://git-scm.com/download/win
+   Install: Use default settings
+
+Restart your computer after installing both programs.
+
+--------------------------------------------------------------------------------
+INSTALLATION
+--------------------------------------------------------------------------------
+
+1. Download the "windows" folder from the repository
+   (or just download "windows/install_user.ps1")
+
+2. Right-click on "install_user.ps1" and select "Run with PowerShell"
+
+   (If that doesn't work, open PowerShell and type:)
+   powershell -ExecutionPolicy Bypass -File windows\install_user.ps1
+
+3. Press any key when prompted to start installation
+
+4. Answer the questions:
+   - Create desktop shortcuts? --> Type: yes
+
+5. Wait 5-10 minutes for installation to complete
+
+6. Press Enter to exit when you see "Installation Complete!"
+
+--------------------------------------------------------------------------------
+LAUNCHING CRUISE LOGS
+--------------------------------------------------------------------------------
+
+EASIEST WAY:
+  Double-click "Cruise Logs - Main Form" on your desktop
+
+ALTERNATE WAY:
+  1. Open "Anaconda Prompt" (search in Start Menu)
+  2. Type: conda activate cruise_logs
+  3. Type: cd %USERPROFILE%\Cruise_Logs
+  4. Type: streamlit run cruise_form.py
+
+--------------------------------------------------------------------------------
+YOUR FILES ARE LOCATED AT
+--------------------------------------------------------------------------------
+
+C:\Users\[YourUsername]\Cruise_Logs\
+
+You can browse this folder to find:
+  - cruise_form.py (main application)
+  - Cruise_Logs.db (your database)
+  - data\ (cruise log data)
+  - exports\ (exported files)
+
+--------------------------------------------------------------------------------
+TROUBLESHOOTING
+--------------------------------------------------------------------------------
+
+ERROR: "Anaconda not found"
+  --> Install Anaconda, restart computer, run installer again
+
+ERROR: "Git not found"
+  --> Install Git, restart computer, run installer again
+
+ERROR: "Port 8501 already in use"
+  --> Close all browser windows with Cruise Logs open
+
+Shortcuts don't work?
+  --> Use the "Alternate Way" above to launch manually
+
+--------------------------------------------------------------------------------
+UPDATING TO LATEST VERSION
+--------------------------------------------------------------------------------
+
+1. Run install_user.ps1 again
+2. When asked "reinstall?", type: yes
+3. Your data will be preserved
+
+--------------------------------------------------------------------------------
+GETTING HELP
+--------------------------------------------------------------------------------
+
+Full documentation: windows/QUICKSTART_USER.md
+GitHub Issues: https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs/issues
+
+================================================================================
+                              THAT'S IT!
+           Your Cruise Logs installation is in your user folder
+                    No admin rights needed!
+================================================================================
