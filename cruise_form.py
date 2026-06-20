@@ -1,10 +1,17 @@
 import os
 import sqlite3
+import sys
 from datetime import date, datetime
 
 import pandas as pd
 import streamlit as st
 from config import DB_PATH
+
+# Ensure UTF-8 encoding on Windows
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 # Page configuration
 st.set_page_config(page_title="GTMBA Cruise Information", page_icon="🚢", layout="wide")
@@ -12,8 +19,11 @@ st.set_page_config(page_title="GTMBA Cruise Information", page_icon="🚢", layo
 
 # Database connection
 def get_connection():
-    """Create a database connection"""
-    return sqlite3.connect(DB_PATH)
+    """Create a database connection with UTF-8 support"""
+    conn = sqlite3.connect(DB_PATH)
+    # Ensure text is handled as UTF-8
+    conn.text_factory = lambda x: x.decode('utf-8', errors='replace') if isinstance(x, bytes) else x
+    return conn
 
 
 def parse_date(date_value):

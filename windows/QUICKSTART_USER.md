@@ -134,6 +134,17 @@ If you see "Port 8501 is already in use":
 - If it fails, close the installer and run it again
 - Previously downloaded files will be kept
 
+### SyntaxError or strange characters (†, â€™, etc.)
+This is a character encoding issue on Windows:
+1. Close Cruise Logs
+2. See **[TROUBLESHOOTING_ENCODING.md](TROUBLESHOOTING_ENCODING.md)** for detailed fix
+3. Quick fix: Run in Anaconda Prompt:
+   ```
+   conda activate cruise_logs
+   cd %USERPROFILE%\Cruise_Logs
+   python diagnose_encoding.py
+   ```
+
 ---
 
 ## Updating Cruise Logs
