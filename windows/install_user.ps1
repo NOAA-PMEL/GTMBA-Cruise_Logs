@@ -167,6 +167,11 @@ if (-not (Test-Path $InstallPath)) {
     Write-Info "This may take a few minutes depending on your internet connection..."
     Write-Host ""
 
+    # Configure Git for proper line ending handling on Windows
+    Write-Info "Configuring Git for Windows compatibility..."
+    & git config --global core.autocrlf false 2>&1 | Out-Null
+    & git config --global core.eol lf 2>&1 | Out-Null
+
     & git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git $InstallPath 2>&1
 
     if ($LASTEXITCODE -eq 0) {
