@@ -31,17 +31,17 @@ try:
         print(f"  - {table[0]}")
     print()
 
-    # Check the cruises table
-    print("Checking 'cruises' table for encoding issues...")
+    # Check the Cruise_Info table
+    print("Checking 'Cruise_Info' table for encoding issues...")
     print("-" * 60)
 
-    cursor.execute("SELECT COUNT(*) FROM cruises")
+    cursor.execute("SELECT COUNT(*) FROM Cruise_Info")
     count = cursor.fetchone()[0]
     print(f"Total cruises: {count}")
     print()
 
     # Get column names
-    cursor.execute("PRAGMA table_info(cruises)")
+    cursor.execute("PRAGMA table_info(Cruise_Info)")
     columns = cursor.fetchall()
     column_names = [col[1] for col in columns]
     print(f"Columns ({len(column_names)}):")
@@ -53,14 +53,14 @@ try:
     print("Scanning for non-ASCII characters...")
     print("-" * 60)
 
-    text_columns = ['Cruise', 'Vessel', 'Personnel', 'Comments', 'Purpose']
+    text_columns = ['Cruise', 'Ship', 'Personnel', 'Port1', 'Port2', 'Port3', 'Lines', 'Leg']
     issues_found = False
 
     for col in text_columns:
         if col not in column_names:
             continue
 
-        cursor.execute(f"SELECT id, {col} FROM cruises WHERE {col} IS NOT NULL")
+        cursor.execute(f"SELECT id, {col} FROM Cruise_Info WHERE {col} IS NOT NULL")
         rows = cursor.fetchall()
 
         for row_id, value in rows:
@@ -87,7 +87,7 @@ try:
     print("-" * 60)
     try:
         import pandas as pd
-        df = pd.read_sql_query("SELECT * FROM cruises LIMIT 10", conn)
+        df = pd.read_sql_query("SELECT * FROM Cruise_Info LIMIT 10", conn)
         print(f"✓ Successfully read {len(df)} rows into pandas DataFrame")
         print(f"  Columns: {list(df.columns)[:5]}...")
         print()
