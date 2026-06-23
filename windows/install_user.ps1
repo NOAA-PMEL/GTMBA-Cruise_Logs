@@ -314,20 +314,6 @@ if ($Response -eq "yes") {
     try {
         $ShellLink = New-Object -ComObject WScript.Shell
 
-        # Main Form Shortcut
-        Write-Info "Creating 'Cruise Logs - Main Form' shortcut..."
-        $LnkPath = "$DesktopPath\Cruise Logs - Main Form.lnk"
-        $Target = "$CondaPath\envs\cruise_logs\Scripts\streamlit.exe"
-        $Arguments = "run `"$InstallPath\cruise_form.py`""
-
-        $Link = $ShellLink.CreateShortcut($LnkPath)
-        $Link.TargetPath = $Target
-        $Link.Arguments = $Arguments
-        $Link.WorkingDirectory = $InstallPath
-        $Link.Description = "Launch Cruise Logs Main Form"
-        $Link.Save()
-        Write-Success "Created: Cruise Logs - Main Form"
-
         # Launcher Shortcut
         Write-Info "Creating 'Cruise Logs - Launcher' shortcut..."
         $LnkPath = "$DesktopPath\Cruise Logs - Launcher.lnk"
@@ -343,7 +329,7 @@ if ($Response -eq "yes") {
         Write-Success "Created: Cruise Logs - Launcher"
 
         Write-Host ""
-        Write-Success "Desktop shortcuts created successfully!"
+        Write-Success "Desktop shortcut created successfully!"
 
     } catch {
         Write-Warning "Could not create shortcuts: $_"
@@ -375,7 +361,7 @@ Write-Host "How to Launch Cruise Logs:" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "  EASY WAY:" -ForegroundColor Cyan
 if ($Response -eq "yes") {
-    Write-Host "    Double-click the 'Cruise Logs - Main Form' icon on your desktop" -ForegroundColor White
+    Write-Host "    Double-click the 'Cruise Logs - Launcher' icon on your desktop" -ForegroundColor White
 } else {
     Write-Host "    Run this installer again and say 'yes' to create shortcuts" -ForegroundColor White
 }
