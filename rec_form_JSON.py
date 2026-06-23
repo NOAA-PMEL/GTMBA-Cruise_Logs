@@ -1868,7 +1868,7 @@ def main():
     """, unsafe_allow_html=True)
 
     # Main title
-    st.title("GTMBA Recovery Log (Normalized)")
+    st.title("GTMBA Recovery Log")
 
     # Check database connection and table
     table_exists, columns = check_database_table()
