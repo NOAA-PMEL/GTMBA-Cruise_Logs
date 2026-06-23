@@ -2970,7 +2970,7 @@ def main():
             default_subsurface_instruments = []
 
         # Basic Information Section
-        st.markdown("### Basic Information")
+        # st.markdown("### Basic Information")  # Hidden per user request
         st.markdown("*Fields marked with * are required*")
 
         # First row: Site and Mooring ID
