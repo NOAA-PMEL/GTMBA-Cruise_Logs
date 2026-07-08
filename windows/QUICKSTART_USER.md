@@ -18,23 +18,21 @@ Before starting, make sure you have these two programs installed:
 
 ## Installation Steps
 
-### Step 1: Download the Installer
+### Step 1: Download the Repository
 
-1. Download the `windows/install_user.ps1` file from this repository
-2. Or download the entire `windows` folder
-3. Save it somewhere easy to find (like your Desktop or Downloads folder)
+1. Go to the Cruise Logs repository: https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs
+2. Click the green **"Code"** button
+3. Select **"Download ZIP"**
+4. Save the file and extract it to a location like your Desktop or Downloads folder
 
 ### Step 2: Run the Installer
 
-**Option A: Right-click method (Easiest)**
-1. Right-click on `install_user.ps1`
-2. Select **"Run with PowerShell"**
-3. If you see a security warning, click **"Run anyway"** or **"Yes"**
+1. Open the extracted `GTMBA-Cruise_Logs-main` folder
+2. Open the `windows` folder
+3. Double-click **`INSTALL_USER.bat`**
+4. If you see a security warning, click **"Run anyway"** or **"Yes"**
 
-**Option B: PowerShell method**
-1. Right-click on `install_user.ps1` and select **"Copy as path"**
-2. Open PowerShell (search for "PowerShell" in Start Menu)
-3. Type: `powershell -ExecutionPolicy Bypass -File ` then paste the path and press Enter
+> 💡 **Tip:** The installer is just a simple batch file that launches the PowerShell installer for you!
 
 ### Step 3: Follow the Prompts
 
@@ -148,9 +146,10 @@ If you see "Port 8501 is already in use":
 ## Updating Cruise Logs
 
 To update to the latest version:
-1. Run `install_user.ps1` again
-2. When asked "Do you want to reinstall?", answer **"yes"**
-3. Your database and data files will be preserved
+1. Download the repository again (see Step 1 above)
+2. Run `INSTALL_USER.bat` again
+3. When asked "Do you want to reinstall?", answer **"yes"**
+4. Your database and data files will be preserved
 
 ---
 

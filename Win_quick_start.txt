@@ -1,26 +1,28 @@
-- You must be Windows Administrator to install Cruise_Logs database
+Before starting, make sure you have these two programs installed:
 
-- Download and install Anaconda for Windows - https://www.anaconda.com/download
-  (you may have to register).  Install for all users, accept further default options.
+1. **Anaconda** (for Python) - [Download here](https://www.anaconda.com/download/). Miniconda is fine too.
+2. **Git** (for downloading files) - [Download here](https://git-scm.com/download/win)
 
-- Download and install Git Bash for windows - https://git-scm.com/install/windows, 
-  Accept all defaults.
+*** Make sure your default browser is chrome or firefox -DO NOT USE MS EDGE- Edge is not compatible.***
 
-- Copy the attached file install.pxx to home directory and rename to install.ps1.
+## Installation Steps
 
-- Open PowerShell as administrator (right click the icon and select "run as admin")
+### Step 1: Download the Repository
 
-- cd to your home directory in PowerShell and run this command:
-	
-  powershell -ExecutionPolicy Bypass -File install.ps1
+1. Go to the Cruise Logs repository: https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs
+2. Click the green **"Code"** button
+3. Select **"Download ZIP"**
+4. Save the file and extract it to a location like your Desktop or Downloads folder
 
-- Follow the propts, answer yes to everything.
+### Step 2: Run the Installer
 
-- 2 desktop icons will be created.  Double-click the Cruise_Logs-Launcher (the other, 
-  Cruise Logs -Main Form, is just a test)
+1. Open the extracted `GTMBA-Cruise_Logs-main` folder
+2. Open the `windows` folder
+3. Double-click **`INSTALL_USER.bat`**
+4. Answer yes to all prompts.
 
-- Click on one of the forms in the menu.  A pop-up window will ask permission to run python,
-  answer yes.
+Double click on Cruise Logs - Launcher icon on desktop and you should be good to go.
 
--Should be good to go.  Please check out forms and provide comments.
+
+
 
