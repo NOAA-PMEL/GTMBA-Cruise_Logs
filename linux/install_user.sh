@@ -267,7 +267,8 @@ if [ "$ENV_EXISTS" = "no" ]; then
     print_info "This may take a few minutes..."
     echo ""
 
-    if $CONDA_CMD create -n cruise_logs python=3.11 -y; then
+    # Use conda-forge channel to avoid Anaconda ToS requirements
+    if $CONDA_CMD create -n cruise_logs python=3.11 -y -c conda-forge --override-channels; then
         print_success "Environment created successfully"
     else
         print_error "Failed to create environment"
@@ -293,13 +294,31 @@ if [ -f "${INSTALL_PATH}/requirements.txt" ]; then
     print_info "This may take several minutes on first installation..."
     echo ""
 
-    if pip install -r "${INSTALL_PATH}/requirements.txt"; then
+    # Install with increased timeout and retries for slow connections
+    if pip install --timeout=120 --retries=5 -r "${INSTALL_PATH}/requirements.txt"; then
         print_success "All packages installed successfully"
     else
         print_error "Failed to install some packages"
-        print_warning "You may still be able to use Cruise Logs, but some features might not work"
+        print_warning "This is usually due to network connectivity issues"
         echo ""
-        read -p "Press Enter to continue anyway..."
+        print_info "Trying alternative installation method..."
+        echo ""
+        
+        # Try installing packages one by one with even longer timeout
+        if pip install --timeout=180 --retries=10 streamlit pandas xlrd openpyxl numpy et-xmlfile; then
+            print_success "Packages installed successfully with alternative method"
+        else
+            print_error "Installation failed. Please check your internet connection."
+            print_warning "You may still be able to use Cruise Logs, but some features might not work"
+            echo ""
+            print_info "Troubleshooting tips:"
+            echo "  1. Check your internet connection"
+            echo "  2. Try again when network is more stable"
+            echo "  3. If behind a firewall/proxy, configure pip accordingly"
+            echo "  4. Run manually: pip install --timeout=300 -r requirements.txt"
+            echo ""
+            read -p "Press Enter to continue anyway..."
+        fi
     fi
 else
     print_error "requirements.txt not found in ${INSTALL_PATH}"

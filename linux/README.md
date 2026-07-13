@@ -155,6 +155,85 @@ To update to the latest version:
 
 ## Troubleshooting
 
+### Conda Terms of Service Error
+
+If you see an error about Terms of Service not being accepted:
+
+```
+CondaToSNonInteractiveError: Terms of Service have not been accepted
+```
+
+You have two options:
+
+**Option 1: Accept the Terms of Service (if you agree)**
+```bash
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+```
+
+**Option 2: Use conda-forge instead (recommended)**
+The updated installer now uses conda-forge channels which don't require ToS acceptance. Simply re-run the installer:
+```bash
+cd ~/Cruise_Logs/linux
+./install_user.sh
+```
+
+Or manually create the environment with conda-forge:
+```bash
+conda create -n cruise_logs python=3.11 -y -c conda-forge --override-channels
+conda activate cruise_logs
+pip install -r ~/Cruise_Logs/requirements.txt
+```
+
+### Network Timeout Errors During Installation
+
+If you see timeout errors when installing packages:
+
+```
+WARNING: Retrying after connection broken by 'ReadTimeoutError'
+ERROR: Could not find a version that satisfies the requirement streamlit
+```
+
+This means your connection to PyPI is slow or unstable. Try these solutions:
+
+**Solution 1: Run the installer again**
+The updated installer now uses longer timeouts and will automatically retry:
+```bash
+cd ~/Cruise_Logs/linux
+./install_user.sh
+```
+
+**Solution 2: Manual installation with extended timeout**
+```bash
+conda activate cruise_logs
+cd ~/Cruise_Logs
+pip install --timeout=300 --retries=10 -r requirements.txt
+```
+
+**Solution 3: Use a PyPI mirror (if in China or experiencing slow connections)**
+```bash
+conda activate cruise_logs
+cd ~/Cruise_Logs
+# Using Tsinghua mirror (China)
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+# OR using Aliyun mirror (China)
+pip install -i https://mirrors.aliyun.com/pypi/simple -r requirements.txt
+```
+
+**Solution 4: Configure proxy (if behind corporate firewall)**
+```bash
+export http_proxy=http://proxy.example.com:8080
+export https_proxy=http://proxy.example.com:8080
+pip install -r requirements.txt
+```
+
+**Solution 5: Install packages individually**
+```bash
+conda activate cruise_logs
+pip install --timeout=300 streamlit
+pip install --timeout=300 pandas xlrd openpyxl numpy et-xmlfile
+```
+
 ### Conda not found
 
 If the installer can't find conda, make sure it's in your PATH:

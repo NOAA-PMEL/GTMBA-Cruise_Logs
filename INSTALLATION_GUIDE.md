@@ -222,6 +222,36 @@ pip install -r requirements.txt --upgrade
 
 ## Common Issues
 
+### Conda Terms of Service Error
+
+If you encounter an error about Terms of Service not being accepted:
+
+```
+CondaToSNonInteractiveError: Terms of Service have not been accepted for the following channels
+```
+
+You have two options:
+
+**Option 1: Accept the Terms of Service (if you agree)**
+```bash
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+```
+
+**Option 2: Use conda-forge instead (recommended)**
+Create the environment using conda-forge channels which don't require ToS acceptance:
+
+```bash
+conda create -n cruise_logs python=3.11 -y -c conda-forge --override-channels
+conda activate cruise_logs
+pip install -r requirements.txt
+```
+
+**Option 3: Re-run the installer**
+The updated installers now use conda-forge by default. Simply re-run:
+- **Linux/macOS**: `./install_user.sh`
+- **Windows**: Run `INSTALL_USER.bat`
+
 ### Conda Not Found
 
 **Windows:**
@@ -250,6 +280,32 @@ xcode-select --install
 sudo apt-get install git  # Ubuntu/Debian
 sudo dnf install git      # Fedora/RHEL
 ```
+
+### Network Timeout Errors
+
+If you see timeout errors when installing packages:
+
+```
+WARNING: Retrying after connection broken by 'ReadTimeoutError'
+ERROR: Could not find a version that satisfies the requirement streamlit
+```
+
+This is a network connectivity issue. The updated installers now handle this better with longer timeouts.
+
+**Quick Fix**: Re-run the installer - it will automatically retry with extended timeouts.
+
+**Manual Fix**:
+```bash
+conda activate cruise_logs
+cd ~/Cruise_Logs  # or your installation path
+pip install --timeout=300 --retries=10 -r requirements.txt
+```
+
+**Behind a firewall/proxy?** See [NETWORK_TROUBLESHOOTING.md](NETWORK_TROUBLESHOOTING.md) for detailed solutions including:
+- Using PyPI mirrors
+- Configuring proxy settings
+- Offline installation
+- Regional mirror setup
 
 ### Port Already in Use
 
