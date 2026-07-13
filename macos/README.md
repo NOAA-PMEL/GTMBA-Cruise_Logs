@@ -6,17 +6,46 @@ This directory contains macOS-specific documentation and configuration files for
 
 | File | Description |
 |------|-------------|
+| **install_user.sh** | 🆕 Automated installation script (recommended for new users) |
 | **SETUP_MACOS.md** | Comprehensive macOS installation guide with Anaconda and troubleshooting |
 | **README.md** | This file |
 
 ## 🚀 Quick Start for macOS Installation
 
-### 1. Prerequisites
+### NEW: One-Line Automated Installation (Recommended)
+
+Download and run the installer:
+
+```bash
+curl -O https://raw.githubusercontent.com/NOAA-PMEL/GTMBA-Cruise_Logs/main/macos/install_user.sh
+bash install_user.sh
+```
+
+Or if you already have the repository:
+
+```bash
+cd /path/to/GTMBA-Cruise_Logs/macos
+./install_user.sh
+```
+
+The automated installer will:
+- ✅ Check for Anaconda/Miniconda and Git
+- ✅ Clone/update the repository to `~/Cruise_Logs`
+- ✅ Create the Python environment
+- ✅ Install all required packages
+- ✅ Create convenient launch scripts
+- ✅ No sudo required!
+
+### Manual Installation
+
+If you prefer manual control over the installation:
+
+**Prerequisites:**
 - macOS 10.15 (Catalina) or later
 - Xcode Command Line Tools (includes Git)
-- Python 3.9+ (Anaconda or venv)
+- Anaconda or Miniconda
 
-### 2. Installation Steps
+**Installation Steps:**
 
 ```bash
 # Install Xcode Command Line Tools (includes Git)
