@@ -172,7 +172,9 @@ if (-not (Test-Path $InstallPath)) {
     & git config --global core.autocrlf false 2>&1 | Out-Null
     & git config --global core.eol lf 2>&1 | Out-Null
 
-    & git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git $InstallPath 2>&1
+    # Clone repository (redirect stderr to null to avoid cosmetic PowerShell errors)
+    # Git writes progress to stderr which PowerShell incorrectly treats as errors
+    & git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git $InstallPath 2>$null
 
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Files downloaded successfully"

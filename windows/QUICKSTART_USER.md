@@ -54,6 +54,8 @@ The installation takes about 5-10 minutes depending on your internet speed. You'
 
 ☕ **Good time for coffee!**
 
+> ⚠️ **Note:** You may see red error-like messages during "Cloning into..." - these are just cosmetic PowerShell warnings and can be ignored. If the installation continues, everything is working correctly! See [POWERSHELL_GIT_ERRORS.md](POWERSHELL_GIT_ERRORS.md) for details.
+
 ---
 
 ## Launching Cruise Logs

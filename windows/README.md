@@ -107,6 +107,30 @@ After the first successful push, Git will remember your credentials.
 
 ### Installation Issues
 
+#### Red Error Messages During Git Clone (Cosmetic Only)
+
+**What you see:**
+```
+git.exe : Cloning into 'C:\Users\YourName\Cruise_Logs'...
++ CategoryInfo          : NotSpecified: (Cloning into...)
++ FullyQualifiedErrorId : NativeCommandError
+```
+
+**Is this a problem?** **NO!** This is just a cosmetic PowerShell quirk.
+
+**Why it happens:** Git writes progress messages to stderr (error stream), and PowerShell displays them in red even though the clone succeeded perfectly.
+
+**What to do:** 
+- ✅ If the installation continues and completes successfully, **ignore it**
+- ✅ Check if `Cruise_Logs` folder was created - if yes, it worked!
+- ✅ Update to the latest installer version which suppresses these cosmetic errors
+
+**To verify it actually worked:**
+```powershell
+Test-Path "$HOME\Cruise_Logs\cruise_form.py"
+# Should return: True
+```
+
 #### Error: "execution policy"
 **Solution:** Run this first, then try installing again:
 ```powershell
