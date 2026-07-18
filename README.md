@@ -29,13 +29,47 @@ All data is stored in a SQLite database (`Cruise_Logs.db`) for version control.
 
 ## Quick Start
 
-### macOS/Linux
+### macOS
 
+**Automated Installation (Recommended):**
+```bash
+# Download and run the installer
+curl -O https://raw.githubusercontent.com/NOAA-PMEL/GTMBA-Cruise_Logs/main/macos/install_user.sh
+bash install_user.sh
+```
+
+**Manual Installation:**
 ```bash
 # Clone repository
 cd ~/NOAA-GitHub
 git clone git@github.com:NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run main form
+streamlit run cruise_form.py
+```
+
+### Linux
+
+**Automated Installation (Recommended):**
+```bash
+# Download and run the installer
+curl -O https://raw.githubusercontent.com/NOAA-PMEL/GTMBA-Cruise_Logs/main/linux/install_user.sh
+bash install_user.sh
+```
+
+**Manual Installation:**
+```bash
+# Clone repository
+git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git ~/Cruise_Logs
+cd ~/Cruise_Logs
+
+# Create conda environment
+conda create -n cruise_logs python=3.11 -y
+conda activate cruise_logs
 
 # Install dependencies
 pip install -r requirements.txt
@@ -82,9 +116,10 @@ streamlit run cruise_form.py
 
 ## System Requirements
 
+- **Operating System:** Windows 10+, macOS 10.15+, or any modern Linux distribution
 - **Python** 3.9 or higher (3.11 recommended)
 - **Git**
-- **Anaconda** (recommended for Windows)
+- **Anaconda or Miniconda** (recommended for all platforms)
 
 ### Python Packages
 
@@ -175,13 +210,15 @@ SELECT * FROM deployment;
 
 ## Documentation
 
-### Platform-Specific Guides
+### Installation Guides
 
 | Document | Description |
 |----------|-------------|
-| **[SETUP_MACOS.md](macos/SETUP_MACOS.md)** | Complete macOS installation guide |
-| **[SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)** | Complete Windows installation guide |
-| **[WINDOWS_INSTALL_CHECKLIST.md](windows/WINDOWS_INSTALL_CHECKLIST.md)** | Step-by-step Windows setup checklist |
+| **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)** | Complete installation guide for all platforms |
+| **[linux/README.md](linux/README.md)** | Linux installation guide |
+| **[macos/SETUP_MACOS.md](macos/SETUP_MACOS.md)** | Complete macOS installation guide |
+| **[windows/SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)** | Complete Windows installation guide |
+| **[windows/WINDOWS_INSTALL_CHECKLIST.md](windows/WINDOWS_INSTALL_CHECKLIST.md)** | Step-by-step Windows setup checklist |
 | **[GITHUB_SETUP.md](windows/GITHUB_SETUP.md)** | GitHub repository setup & cloning |
 
 ### Inventory Documentation
@@ -214,15 +251,23 @@ Cruise_Logs/
 ├── db_sync2.py                 # Database sync utility
 ├── config.py                   # Cross-platform configuration
 ├── verify_setup.py             # Setup verification script
+├── install_user.sh             # Universal shell installer (Linux/macOS)
+├── setup_backup.sh             # Backup automation setup
 │
 ├── requirements.txt            # Python dependencies
 ├── .gitignore                  # Git ignore rules
 │
+├── linux/                      # Linux-specific files
+│   ├── install_user.sh         # Linux automated installer
+│   └── README.md               # Linux documentation
+│
 ├── macos/                      # macOS-specific files
+│   ├── install_user.sh         # macOS automated installer
 │   ├── SETUP_MACOS.md          # macOS setup guide
 │   └── README.md               # macOS documentation
 │
 ├── windows/                    # Windows-specific files
+│   ├── install.ps1             # Windows automated installer
 │   ├── SETUP_WINDOWS.md        # Windows setup guide
 │   ├── WINDOWS_INSTALL_CHECKLIST.md # Step-by-step checklist
 │   ├── GITHUB_SETUP.md         # Git repository guide
@@ -231,12 +276,35 @@ Cruise_Logs/
 │   └── README.md               # Windows documentation
 │
 ├── README.md                   # This file
+├── INSTALLATION_GUIDE.md       # Installation guide (all platforms)
 └── README_inventories.md       # Inventory documentation
 ```
 
 ## Installation
 
-### Option 1: Quick Install (Existing Repository)
+For complete installation instructions including automated installers, see **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)**.
+
+### Option 1: Automated Installation (Recommended)
+
+**Linux/macOS:**
+```bash
+# Download and run the appropriate installer
+# For Linux:
+curl -O https://raw.githubusercontent.com/NOAA-PMEL/GTMBA-Cruise_Logs/main/linux/install_user.sh
+bash install_user.sh
+
+# For macOS:
+curl -O https://raw.githubusercontent.com/NOAA-PMEL/GTMBA-Cruise_Logs/main/macos/install_user.sh
+bash install_user.sh
+```
+
+**Windows:**
+```powershell
+# Run the automated PowerShell installer
+powershell -ExecutionPolicy Bypass -File windows\install.ps1
+```
+
+### Option 2: Quick Install (Manual)
 
 ```bash
 # Clone the repository
@@ -253,19 +321,19 @@ python verify_setup.py
 streamlit run cruise_form.py
 ```
 
-### Option 2: Windows Field Computer
+### Option 3: Windows Installation (Manual)
 
 Follow the comprehensive guide in **[windows/SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)**:
 
 1. Install Anaconda (full installation)
 2. Install Git
-3. Clone repository to `C:\Cruise_Logs`
+3. Clone repository
 4. Create conda environment
-5. Update database paths in Python files
+5. Update database paths in Python files (if needed)
 6. Run verification script
 7. Create desktop shortcuts
 
-### Option 3: New Repository Setup
+### Option 4: New Repository Setup
 
 See **[windows/GITHUB_SETUP.md](windows/GITHUB_SETUP.md)** for instructions on:
 

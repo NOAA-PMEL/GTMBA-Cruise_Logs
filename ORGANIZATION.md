@@ -8,9 +8,12 @@ This document explains the organization of the Cruise_Logs repository, particula
 Cruise_Logs/
 │
 ├── 📄 README.md                        # Main project documentation
+├── 📄 INSTALLATION_GUIDE.md            # Installation guide for all platforms
 ├── 📄 requirements.txt                 # Python dependencies (cross-platform)
 ├── 📄 config.py                        # Cross-platform configuration module
 ├── 📄 verify_setup.py                  # Setup verification script (all platforms)
+├── 📄 install_user.sh                  # Universal shell installer (Linux/macOS)
+├── 📄 setup_backup.sh                  # Backup automation setup
 ├── 📄 .gitignore                       # Git ignore rules
 ├── 📄 .gitattributes                   # Git attributes configuration
 │
@@ -61,7 +64,12 @@ Cruise_Logs/
 │
 ├── 🍎 macos/                           # macOS-specific files
 │   ├── README.md                       # macOS quick reference
-│   └── SETUP_MACOS.md                  # Complete macOS setup guide
+│   ├── SETUP_MACOS.md                  # Complete macOS setup guide
+│   └── install_user.sh                 # macOS automated installer
+│
+├── 🐧 linux/                           # Linux-specific files
+│   ├── README.md                       # Linux quick reference
+│   └── install_user.sh                 # Linux automated installer
 │
 ├── 🪟 windows/                         # Windows-specific files
 │   ├── README.md                       # Windows quick reference
@@ -84,18 +92,26 @@ Cruise_Logs/
 ### macOS Users → [`macos/`](macos/)
 
 **Files:**
+- `install_user.sh` - Automated installation script (recommended)
 - `SETUP_MACOS.md` - Complete installation guide for macOS
 - `README.md` - Quick reference and overview
 
 **Key Topics:**
-- Homebrew installation
-- Git setup
+- Automated installation with shell script
+- Git setup (Xcode Command Line Tools or Homebrew)
 - Anaconda or venv configuration
 - Terminal aliases and shortcuts
 - Automator app creation
 - macOS-specific troubleshooting
 
-**Quick Start:**
+**Quick Start (Automated):**
+```bash
+# Download and run installer
+curl -O https://raw.githubusercontent.com/NOAA-PMEL/GTMBA-Cruise_Logs/main/macos/install_user.sh
+bash install_user.sh
+```
+
+**Quick Start (Manual):**
 ```bash
 cd ~/NOAA-GitHub
 git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
@@ -103,9 +119,30 @@ cd GTMBA-Cruise_Logs
 # Follow macos/SETUP_MACOS.md
 ```
 
+### Linux Users → [`linux/`](linux/)
+
+**Files:**
+- `install_user.sh` - Automated installation script (recommended)
+- `README.md` - Quick reference and overview
+
+**Key Topics:**
+- Automated installation with shell script
+- Distribution-specific instructions (Ubuntu, Debian, Fedora, RHEL, CentOS, Arch)
+- Git and Anaconda/Miniconda setup
+- Shell script launchers
+- Linux-specific troubleshooting
+
+**Quick Start (Automated):**
+```bash
+# Download and run installer
+curl -O https://raw.githubusercontent.com/NOAA-PMEL/GTMBA-Cruise_Logs/main/linux/install_user.sh
+bash install_user.sh
+```
+
 ### Windows Users → [`windows/`](windows/)
 
 **Files:**
+- `install.ps1` - Automated PowerShell installer (recommended)
 - `SETUP_WINDOWS.md` - Complete installation guide for Windows
 - `WINDOWS_INSTALL_CHECKLIST.md` - Interactive checklist format
 - `GITHUB_SETUP.md` - Git repository setup and SSH configuration
@@ -121,11 +158,15 @@ cd GTMBA-Cruise_Logs
 - Batch file usage
 - Windows-specific troubleshooting
 
-**Quick Start:**
+**Quick Start (Automated):**
 ```powershell
 # Run the automated installer
-powershell -ExecutionPolicy Bypass -File install.ps1
-# Or clone manually:
+powershell -ExecutionPolicy Bypass -File windows\install.ps1
+```
+
+**Quick Start (Manual):**
+```powershell
+# Clone manually:
 git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
 # Follow windows/SETUP_WINDOWS.md
@@ -136,17 +177,26 @@ cd GTMBA-Cruise_Logs
 ### Where to Start?
 
 1. **New to the system?** → Read main [`README.md`](README.md)
-2. **Installing on macOS?** → Go to [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
-3. **Installing on Windows?** → Go to [`windows/WINDOWS_INSTALL_CHECKLIST.md`](windows/WINDOWS_INSTALL_CHECKLIST.md)
-4. **Setting up backups?** → See [`BACKUP_QUICKSTART.txt`](BACKUP_QUICKSTART.txt)
-5. **Need inventory info?** → Read [`README_inventories.md`](README_inventories.md)
-6. **Using the launcher?** → See [`LAUNCHER_README.md`](LAUNCHER_README.md)
+2. **Installing on any platform?** → See [`INSTALLATION_GUIDE.md`](INSTALLATION_GUIDE.md)
+3. **Installing on macOS?** → Run [`macos/install_user.sh`](macos/install_user.sh) or see [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
+4. **Installing on Linux?** → Run [`linux/install_user.sh`](linux/install_user.sh) or see [`linux/README.md`](linux/README.md)
+5. **Installing on Windows?** → Run [`windows/install.ps1`](windows/install.ps1) or go to [`windows/WINDOWS_INSTALL_CHECKLIST.md`](windows/WINDOWS_INSTALL_CHECKLIST.md)
+6. **Setting up backups?** → See [`BACKUP_QUICKSTART.txt`](BACKUP_QUICKSTART.txt)
+7. **Need inventory info?** → Read [`README_inventories.md`](README_inventories.md)
+8. **Using the launcher?** → See [`LAUNCHER_README.md`](LAUNCHER_README.md)
 
 ### Documentation Hierarchy
 
 ```
 Main README.md
-    ├── Platform Setup
+    ├── INSTALLATION_GUIDE.md           # All platforms
+    │   ├── install_user.sh             # Root-level universal installer
+    │   ├── linux/install_user.sh       # Linux-specific
+    │   ├── macos/install_user.sh       # macOS-specific
+    │   └── windows/install.ps1         # Windows-specific
+    │
+    ├── Platform Setup Guides
+    │   ├── linux/README.md
     │   ├── macos/SETUP_MACOS.md
     │   └── windows/SETUP_WINDOWS.md
     │       └── windows/WINDOWS_INSTALL_CHECKLIST.md
@@ -196,24 +246,33 @@ These files work on **both** macOS and Windows:
 | **Verification** | `verify_setup.py` | Setup checker |
 | **Database Mgmt** | `db_version.py`, `db_sync2.py`, `backup_database.py` | Version, sync, backup |
 | **Launchers** | `launcher.py`, `admin_launcher.py` | Application launchers |
+| **Installation** | `install_user.sh` | Universal installer (Linux/macOS) |
 | **Backup Setup** | `setup_backup.sh` | Automated backup configuration |
 | **Git** | `.gitignore` | Git configuration |
+
+### Linux Directory
+
+| File | Purpose |
+|------|---------||
+| `install_user.sh` | Automated Linux installer script |
+| `README.md` | Complete Linux installation guide |
 
 ### macOS Directory
 
 | File | Purpose |
-|------|---------|
+|------|---------||
+| `install_user.sh` | Automated macOS installer script |
 | `SETUP_MACOS.md` | Complete macOS installation guide |
 | `README.md` | Quick start for macOS users |
 
 ### Windows Directory
 
 | File | Purpose |
-|------|---------|
+|------|---------||
+| `install.ps1` | Automated Windows installer script |
 | `SETUP_WINDOWS.md` | Complete Windows installation guide |
 | `WINDOWS_INSTALL_CHECKLIST.md` | Step-by-step checklist |
 | `GITHUB_SETUP.md` | Git and GitHub setup |
-| `install.ps1` | Automated Windows installer |
 | `environment_windows.yml` | Conda environment file |
 | `run_cruise_form.bat` | Batch launcher script |
 | `README.md` | Quick start for Windows users |
@@ -230,16 +289,24 @@ These files work on **both** macOS and Windows:
 ## 🚀 Typical Workflows
 
 ### First-Time Setup (macOS)
-1. Read `macos/SETUP_MACOS.md`
-2. Clone repository
-3. Run `verify_setup.py`
-4. Start using applications
+1. Run `macos/install_user.sh` (automated)
+   - Or read `macos/SETUP_MACOS.md` for manual setup
+2. Repository is cloned to `~/Cruise_Logs`
+3. Environment and packages installed automatically
+4. Use launch scripts: `./start_cruise_logs.sh`
+
+### First-Time Setup (Linux)
+1. Run `linux/install_user.sh` (automated)
+2. Repository is cloned to `~/Cruise_Logs`
+3. Environment and packages installed automatically
+4. Use launch scripts: `./start_cruise_logs.sh`
 
 ### First-Time Setup (Windows)
-1. Read `windows/WINDOWS_INSTALL_CHECKLIST.md` (follow step-by-step)
-2. Refer to `windows/SETUP_WINDOWS.md` for details
-3. Run `verify_setup.py`
-4. Create desktop shortcut with `windows/run_cruise_form.bat`
+1. Run `windows/install.ps1` (automated)
+   - Or read `windows/WINDOWS_INSTALL_CHECKLIST.md` for manual setup
+2. Repository is cloned to user directory
+3. Environment and packages installed automatically
+4. Desktop shortcuts created automatically
 5. Start using applications
 
 ### Daily Usage (Any Platform)
@@ -260,11 +327,17 @@ These files work on **both** macOS and Windows:
 
 ## 🔍 Finding What You Need
 
-### "I need to install on Windows"
-→ [`windows/WINDOWS_INSTALL_CHECKLIST.md`](windows/WINDOWS_INSTALL_CHECKLIST.md)
+### "I need to install the system"
+→ [`INSTALLATION_GUIDE.md`](INSTALLATION_GUIDE.md)
+
+### "I need to install on Linux"
+→ Run [`linux/install_user.sh`](linux/install_user.sh) or see [`linux/README.md`](linux/README.md)
 
 ### "I need to install on macOS"
-→ [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
+→ Run [`macos/install_user.sh`](macos/install_user.sh) or see [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
+
+### "I need to install on Windows"
+→ Run [`windows/install.ps1`](windows/install.ps1) or see [`windows/WINDOWS_INSTALL_CHECKLIST.md`](windows/WINDOWS_INSTALL_CHECKLIST.md)
 
 ### "How do I set up backups?"
 → [`BACKUP_QUICKSTART.txt`](BACKUP_QUICKSTART.txt) or [`BACKUP_SETUP.md`](BACKUP_SETUP.md)
@@ -328,8 +401,9 @@ Potential additions to the structure:
 
 ```
 Cruise_Logs/
-├── linux/                     # Future: Linux documentation
-│   └── SETUP_LINUX.md
+├── linux/                     # ✅ Added: Linux documentation
+│   ├── README.md              # ✅ Complete
+│   └── install_user.sh        # ✅ Complete
 ├── docker/                    # Future: Docker configuration
 │   ├── Dockerfile
 │   └── docker-compose.yml
