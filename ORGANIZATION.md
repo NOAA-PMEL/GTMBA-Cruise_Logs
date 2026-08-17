@@ -73,11 +73,11 @@ Cruise_Logs/
 │
 ├── 🪟 windows/                         # Windows-specific files
 │   ├── README.md                       # Windows quick reference
-│   ├── SETUP_WINDOWS.md                # Complete Windows setup guide
-│   ├── WINDOWS_INSTALL_CHECKLIST.md   # Step-by-step checklist
+│   ├── QUICKSTART_USER.md              # Complete Windows setup guide
+│   ├── INSTALL_USER.bat                # Easy installer launcher
 │   ├── GITHUB_SETUP.md                 # Git repository setup
 │   ├── environment_windows.yml         # Conda environment specification
-│   ├── install.ps1                     # Automated Windows installer
+│   ├── install_user.ps1                # Automated Windows installer
 │   └── run_cruise_form.bat             # Windows batch launcher
 │
 └── 📂 backups/                         # Backup directory (not in git)
@@ -142,9 +142,9 @@ bash install_user.sh
 ### Windows Users → [`windows/`](windows/)
 
 **Files:**
-- `install.ps1` - Automated PowerShell installer (recommended)
-- `SETUP_WINDOWS.md` - Complete installation guide for Windows
-- `WINDOWS_INSTALL_CHECKLIST.md` - Interactive checklist format
+- `install_user.ps1` - Automated PowerShell installer (recommended)
+- `QUICKSTART_USER.md` - Complete installation guide for Windows
+- `INSTALL_INSTRUCTIONS_USER.txt` - One-page printable instructions
 - `GITHUB_SETUP.md` - Git repository setup and SSH configuration
 - `environment_windows.yml` - Conda environment file
 - `run_cruise_form.bat` - Batch file launcher
@@ -153,7 +153,7 @@ bash install_user.sh
 **Key Topics:**
 - Anaconda installation on Windows
 - Git setup for Windows
-- Path configuration for `C:\Cruise_Logs`
+- Path configuration for user directory
 - Desktop shortcuts
 - Batch file usage
 - Windows-specific troubleshooting
@@ -161,7 +161,7 @@ bash install_user.sh
 **Quick Start (Automated):**
 ```powershell
 # Run the automated installer
-powershell -ExecutionPolicy Bypass -File windows\install.ps1
+powershell -ExecutionPolicy Bypass -File windows\install_user.ps1
 ```
 
 **Quick Start (Manual):**
@@ -169,7 +169,7 @@ powershell -ExecutionPolicy Bypass -File windows\install.ps1
 # Clone manually:
 git clone https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 cd GTMBA-Cruise_Logs
-# Follow windows/SETUP_WINDOWS.md
+# Follow windows/QUICKSTART_USER.md
 ```
 
 ## 📚 Documentation Guide
@@ -180,7 +180,7 @@ cd GTMBA-Cruise_Logs
 2. **Installing on any platform?** → See [`INSTALLATION_GUIDE.md`](INSTALLATION_GUIDE.md)
 3. **Installing on macOS?** → Run [`macos/install_user.sh`](macos/install_user.sh) or see [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
 4. **Installing on Linux?** → Run [`linux/install_user.sh`](linux/install_user.sh) or see [`linux/README.md`](linux/README.md)
-5. **Installing on Windows?** → Run [`windows/install.ps1`](windows/install.ps1) or go to [`windows/WINDOWS_INSTALL_CHECKLIST.md`](windows/WINDOWS_INSTALL_CHECKLIST.md)
+5. **Installing on Windows?** → Run [`windows/install_user.ps1`](windows/install_user.ps1) or go to [`windows/QUICKSTART_USER.md`](windows/QUICKSTART_USER.md)
 6. **Setting up backups?** → See [`BACKUP_QUICKSTART.txt`](BACKUP_QUICKSTART.txt)
 7. **Need inventory info?** → Read [`README_inventories.md`](README_inventories.md)
 8. **Using the launcher?** → See [`LAUNCHER_README.md`](LAUNCHER_README.md)
@@ -193,13 +193,12 @@ Main README.md
     │   ├── install_user.sh             # Root-level universal installer
     │   ├── linux/install_user.sh       # Linux-specific
     │   ├── macos/install_user.sh       # macOS-specific
-    │   └── windows/install.ps1         # Windows-specific
+    │   └── windows/install_user.ps1    # Windows-specific
     │
     ├── Platform Setup Guides
     │   ├── linux/README.md
     │   ├── macos/SETUP_MACOS.md
-    │   └── windows/SETUP_WINDOWS.md
-    │       └── windows/WINDOWS_INSTALL_CHECKLIST.md
+    │   └── windows/QUICKSTART_USER.md
     │
     ├── Repository Setup
     │   └── windows/GITHUB_SETUP.md
@@ -268,10 +267,10 @@ These files work on **both** macOS and Windows:
 ### Windows Directory
 
 | File | Purpose |
-|------|---------||
-| `install.ps1` | Automated Windows installer script |
-| `SETUP_WINDOWS.md` | Complete Windows installation guide |
-| `WINDOWS_INSTALL_CHECKLIST.md` | Step-by-step checklist |
+|------|---------| |
+| `install_user.ps1` | Automated Windows installer script |
+| `QUICKSTART_USER.md` | Complete Windows installation guide |
+| `INSTALL_USER.bat` | Easy launcher for installer |
 | `GITHUB_SETUP.md` | Git and GitHub setup |
 | `environment_windows.yml` | Conda environment file |
 | `run_cruise_form.bat` | Batch launcher script |
@@ -302,8 +301,8 @@ These files work on **both** macOS and Windows:
 4. Use launch scripts: `./start_cruise_logs.sh`
 
 ### First-Time Setup (Windows)
-1. Run `windows/install.ps1` (automated)
-   - Or read `windows/WINDOWS_INSTALL_CHECKLIST.md` for manual setup
+1. Run `windows/install_user.ps1` (automated)
+   - Or read `windows/QUICKSTART_USER.md` for manual setup
 2. Repository is cloned to user directory
 3. Environment and packages installed automatically
 4. Desktop shortcuts created automatically
@@ -337,7 +336,7 @@ These files work on **both** macOS and Windows:
 → Run [`macos/install_user.sh`](macos/install_user.sh) or see [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md)
 
 ### "I need to install on Windows"
-→ Run [`windows/install.ps1`](windows/install.ps1) or see [`windows/WINDOWS_INSTALL_CHECKLIST.md`](windows/WINDOWS_INSTALL_CHECKLIST.md)
+→ Run [`windows/install_user.ps1`](windows/install_user.ps1) or see [`windows/QUICKSTART_USER.md`](windows/QUICKSTART_USER.md)
 
 ### "How do I set up backups?"
 → [`BACKUP_QUICKSTART.txt`](BACKUP_QUICKSTART.txt) or [`BACKUP_SETUP.md`](BACKUP_SETUP.md)
@@ -358,7 +357,7 @@ These files work on **both** macOS and Windows:
 → [`DB_VERSION_QUICKSTART.md`](DB_VERSION_QUICKSTART.md)
 
 ### "I want to create a shortcut (Windows)"
-→ [`windows/SETUP_WINDOWS.md`](windows/SETUP_WINDOWS.md) - Section on shortcuts
+→ [`windows/QUICKSTART_USER.md`](windows/QUICKSTART_USER.md) - Section on shortcuts
 
 ### "I want to create an alias (macOS)"
 → [`macos/SETUP_MACOS.md`](macos/SETUP_MACOS.md) - Section on aliases

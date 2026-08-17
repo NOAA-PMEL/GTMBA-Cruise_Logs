@@ -35,7 +35,7 @@ All files are located in the `windows/` directory for better organization.
 
 ### Main README
 - **`README.md`** (in project root) - Updated to include user installation options  
-  Now shows both field laptop and user installation methods
+  Shows user installation method
 
 ---
 
@@ -67,25 +67,19 @@ Tell them to:
 
 ---
 
-## Installation Comparison
+## Installation Overview
 
-| Feature | Field Laptop | User Install |
-|---------|--------------|-------------|
-| Script | `windows/install.ps1` | `windows/install_user.ps1` |
-| Install Location | `C:\Cruise_Logs` | `C:\Users\USERNAME\Cruise_Logs` |
-| Admin Required | Recommended | **No** |
-| Target Users | Field technicians | Office staff, managers |
-| Shared Environment | Single machine setup | Per-user setup |
-| Desktop Shortcuts | Yes | Yes |
-| Conda Environment | `cruise_logs` | `cruise_logs` |
+**User Installation** (`install_user.ps1`):
+- **Install Location:** `C:\Users\USERNAME\Cruise_Logs`
+- **Admin Required:** **No**
+- **Target Users:** All users
+- **Desktop Shortcuts:** Yes
+- **Conda Environment:** `cruise_logs`
 
----
-
-## Key Differences from Field Installation
-
-1. **Location**: Installs to user's home directory instead of `C:\Cruise_Logs`
+**Key Features:**
+1. **Location**: Installs to user's home directory
 2. **Permissions**: No admin rights needed
-3. **User-friendly**: More explanatory messages for non-technical users
+3. **User-friendly**: Clear explanatory messages for non-technical users
 4. **Smart Updates**: Detects existing installations and offers to update
 5. **Environment Check**: Checks if conda environment already exists
 6. **Isolated**: Each user on a shared computer gets their own installation

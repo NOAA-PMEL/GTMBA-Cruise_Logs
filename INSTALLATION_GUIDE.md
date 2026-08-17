@@ -36,7 +36,7 @@ The installer automatically:
 ### Launch After Installation
 - Double-click the **"Cruise Logs - Launcher"** icon on your desktop
 
-[See detailed Windows documentation →](windows/)
+[See detailed Windows documentation →](windows/QUICKSTART_USER.md)
 
 ---
 

@@ -1,12 +1,12 @@
 # Database Sync Workflow
 
-This guide explains how to keep the Cruise_Logs database synchronized across multiple field laptops using GitHub as the master repository.
+This guide explains how to keep the Cruise_Logs database synchronized across multiple computers using GitHub as the master repository.
 
 ## Overview
 
 The database (`Cruise_Logs.db`) is tracked in Git and synchronized through GitHub. Each update to the database is versioned and tracked with metadata.
 
-**Key Concept:** GitHub = Master Copy. All field laptops pull from and push to GitHub.
+**Key Concept:** GitHub = Master Copy. All computers pull from and push to GitHub.
 
 ---
 
@@ -17,9 +17,7 @@ The database (`Cruise_Logs.db`) is tracked in Git and synchronized through GitHu
 Before starting work, pull the latest database from GitHub:
 
 
-cd C:\Cruise_Logs  # Windows
-# or
-cd ~/NOAA-GitHub/GTMBA-Cruise_Logs  # macOS
+cd ~/Cruise_Logs  # Windows/Linux/macOS
 
 # Pull latest changes
 git pull origin main

@@ -50,8 +50,8 @@ Example output:
 ============================================================
 Version:        23
 Last Modified:  2025-01-15 16:45:23
-Modified By:    jsmith@FIELD-LAPTOP
-Hostname:       FIELD-LAPTOP
+Modified By:    jsmith@WORKSTATION
+Hostname:       WORKSTATION
 Git Commit:     a3b5c2d
 Description:    Added RB2501 cruise, 3 deployments
 Record Count:   1547

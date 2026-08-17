@@ -6,7 +6,6 @@
 
 ## 🚀 Getting Started
 
-### For Office Users / Individual Installation
 **→ Start here:** [QUICKSTART_USER.md](QUICKSTART_USER.md)
 
 **Quick install:**
@@ -18,22 +17,13 @@ INSTALL_USER.bat
 powershell -ExecutionPolicy Bypass -File install_user.ps1
 ```
 
-### For Field Laptops / Shared Computers
-**→ Start here:** [README.md](README.md) (scroll to "Quick Install")
-
-**Quick install:**
-```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
-```
-
 ---
 
 ## 📁 File Directory
 
 ### Installation Scripts
 | File | Purpose |
-|------|---------|
-| `install.ps1` | Field laptop installer (C:\Cruise_Logs) |
+|------|---------|  
 | `install_user.ps1` | User installer (C:\Users\YourName\Cruise_Logs) |
 | `INSTALL_USER.bat` | Easy launcher for user installer |
 
@@ -54,58 +44,14 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 
 ---
 
-## 🤔 Which Installation Should I Use?
-
-```
-┌─────────────────────────────────────────────┐
-│  Do you have admin rights on this computer? │
-└─────────────────┬───────────────────────────┘
-                  │
-         ┌────────┴────────┐
-         │                 │
-        YES               NO
-         │                 │
-         ▼                 ▼
-┌─────────────────┐  ┌──────────────────┐
-│ Is this a       │  │ Use USER install │
-│ shared field    │  │ install_user.ps1 │
-│ laptop?         │  └──────────────────┘
-└────────┬────────┘
-         │
-    ┌────┴─────┐
-   YES        NO
-    │          │
-    ▼          ▼
-┌────────┐  ┌────────┐
-│ FIELD  │  │ USER   │
-│ install│  │ install│
-└────────┘  └────────┘
-```
+## 🤔 Installation Overview
 
 **User Installation** (`install_user.ps1`)
 - ✅ No admin needed
-- ✅ Installs to your user folder
+- ✅ Installs to your user folder (`C:\Users\YourName\Cruise_Logs`)
 - ✅ Won't affect other users
-- ✅ Best for: Office work, managers, individual use
-
-**Field Installation** (`install.ps1`)
-- ⚙️ Admin recommended
-- ⚙️ Installs to C:\Cruise_Logs
-- ⚙️ Shared by all users
-- ⚙️ Best for: Field laptops, shared equipment
-
----
-
-## 📊 Installation Comparison
-
-| Feature | User Install | Field Install |
-|---------|-------------|---------------|
-| **Script** | `install_user.ps1` | `install.ps1` |
-| **Location** | `C:\Users\YourName\Cruise_Logs` | `C:\Cruise_Logs` |
-| **Admin Rights** | ❌ Not needed | ✅ Recommended |
-| **Shared Machine** | Each user gets own copy | Single shared copy |
-| **Best For** | Office users, managers | Field technicians |
-| **Desktop Shortcuts** | ✅ Yes | ✅ Yes |
+- ✅ Creates desktop shortcuts
+- ✅ Perfect for all users
 
 ---
 
@@ -114,10 +60,6 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 ### I just want to install Cruise Logs
 → Read [QUICKSTART_USER.md](QUICKSTART_USER.md)  
 → Run `INSTALL_USER.bat`
-
-### I need to set up a field laptop
-→ Read [README.md](README.md)  
-→ Run `install.ps1`
 
 ### I want printable instructions
 → Print [INSTALL_INSTRUCTIONS_USER.txt](INSTALL_INSTRUCTIONS_USER.txt)

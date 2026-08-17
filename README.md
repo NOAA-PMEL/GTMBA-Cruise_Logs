@@ -82,18 +82,12 @@ streamlit run cruise_form.py
 
 **Automated Installation (Recommended)**
 
-**For field laptops** (installs to `C:\Cruise_Logs`):
-```powershell
-powershell -ExecutionPolicy Bypass -File windows\install.ps1
-```
-
-**For user installation** (installs to `C:\Users\YourName\Cruise_Logs`, no admin required):
+Installs to `C:\Users\YourName\Cruise_Logs`, no admin required:
 ```powershell
 powershell -ExecutionPolicy Bypass -File windows\install_user.ps1
 ```
 
-📖 See **[windows/QUICKSTART_USER.md](windows/QUICKSTART_USER.md)** for user installation guide  
-📖 See **[windows/FIELD_DEPLOYMENT_GUIDE.md](windows/FIELD_DEPLOYMENT_GUIDE.md)** for field laptop setup
+📖 See **[windows/QUICKSTART_USER.md](windows/QUICKSTART_USER.md)** for detailed installation guide
 
 **Manual Installation**
 
@@ -217,8 +211,8 @@ SELECT * FROM deployment;
 | **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)** | Complete installation guide for all platforms |
 | **[linux/README.md](linux/README.md)** | Linux installation guide |
 | **[macos/SETUP_MACOS.md](macos/SETUP_MACOS.md)** | Complete macOS installation guide |
-| **[windows/SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)** | Complete Windows installation guide |
-| **[windows/WINDOWS_INSTALL_CHECKLIST.md](windows/WINDOWS_INSTALL_CHECKLIST.md)** | Step-by-step Windows setup checklist |
+| **[windows/QUICKSTART_USER.md](windows/QUICKSTART_USER.md)** | Complete Windows installation guide |
+| **[windows/INSTALL_INSTRUCTIONS_USER.txt](windows/INSTALL_INSTRUCTIONS_USER.txt)** | One-page printable Windows instructions |
 | **[GITHUB_SETUP.md](windows/GITHUB_SETUP.md)** | GitHub repository setup & cloning |
 
 ### Inventory Documentation
@@ -267,9 +261,9 @@ Cruise_Logs/
 │   └── README.md               # macOS documentation
 │
 ├── windows/                    # Windows-specific files
-│   ├── install.ps1             # Windows automated installer
-│   ├── SETUP_WINDOWS.md        # Windows setup guide
-│   ├── WINDOWS_INSTALL_CHECKLIST.md # Step-by-step checklist
+│   ├── install_user.ps1        # Windows automated installer
+│   ├── INSTALL_USER.bat        # Easy launcher for installer
+│   ├── QUICKSTART_USER.md      # Windows setup guide
 │   ├── GITHUB_SETUP.md         # Git repository guide
 │   ├── environment_windows.yml # Conda environment
 │   ├── run_cruise_form.bat     # Windows launcher
@@ -301,7 +295,7 @@ bash install_user.sh
 **Windows:**
 ```powershell
 # Run the automated PowerShell installer
-powershell -ExecutionPolicy Bypass -File windows\install.ps1
+powershell -ExecutionPolicy Bypass -File windows\install_user.ps1
 ```
 
 ### Option 2: Quick Install (Manual)
@@ -323,7 +317,7 @@ streamlit run cruise_form.py
 
 ### Option 3: Windows Installation (Manual)
 
-Follow the comprehensive guide in **[windows/SETUP_WINDOWS.md](windows/SETUP_WINDOWS.md)**:
+Follow the comprehensive guide in **[windows/QUICKSTART_USER.md](windows/QUICKSTART_USER.md)**:
 
 1. Install Anaconda (full installation)
 2. Install Git
@@ -355,17 +349,14 @@ from config import DB_PATH, BASE_DIR
 
 ### Manual Configuration
 
-Update database paths in these files for Windows:
+The system uses `config.py` for automatic path detection. Manual configuration is typically not needed.
+
+If needed, database paths can be updated in these files:
 
 - `adcp_dep_form.py` (Line 9)
 - `cruise_form.py` (Line 8)
 - `rec_form_JSON.py` (Line 11)
 - `repair_form_JSON.py` (Line 10)
-
-Change to:
-```python
-DB_PATH = r'C:\Cruise_Logs\Cruise_Logs.db'
-```
 
 ## Usage Examples
 

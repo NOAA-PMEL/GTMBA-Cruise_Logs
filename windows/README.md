@@ -2,79 +2,30 @@
 
 Complete guide for installing and configuring the Cruise_Logs system on Windows.
 
-## Installation Options
+## Installation
 
-**Choose your installation type:**
+👉 **Follow the [QUICKSTART_USER.md](QUICKSTART_USER.md) guide for installation!**
 
-- **User Installation** (Recommended for office users, managers) - [QUICKSTART_USER.md](QUICKSTART_USER.md)
-  - No admin privileges required
-  - Installs to `C:\Users\YourName\Cruise_Logs`
-  - Perfect for individual users
-  
-- **Field Laptop Installation** (For shared field computers) - See below
-  - Installs to `C:\Cruise_Logs`
-  - Recommended to have admin access
-  - Shared machine setup
+**Quick summary:**
+- No admin privileges required
+- Installs to `C:\Users\YourName\Cruise_Logs`
+- Perfect for all users
 
-## Table of Contents
-
-- [Quick Install (Field Laptops)](#quick-install)
-- [User Installation](#user-installation)
-- [GitHub Authentication](#github-authentication)
-- [Troubleshooting](#troubleshooting)
-- [Daily Usage](#daily-usage)
-
-## User Installation
-
-👉 **Most users should follow the [QUICKSTART_USER.md](QUICKSTART_USER.md) guide!**
-
-Quick summary:
+**Installation steps:**
 1. Run `INSTALL_USER.bat` or `install_user.ps1`
-2. No admin required
-3. Installs to your user folder
+2. Wait for automated installation to complete
+3. Launch using the desktop shortcut
 
 See [QUICKSTART_USER.md](QUICKSTART_USER.md) for detailed instructions.
 
----
+## Table of Contents
 
-## Quick Install (Field Laptops)
-
-### Prerequisites
-
-- **Windows 10** or Windows 11
-- **Administrator access** (recommended)
-- **Internet connection**
-
-### Installation Steps
-
-1. **Download** `install.ps1` to your Desktop or Downloads folder
-
-2. **Open PowerShell as Administrator**
-   - Right-click Windows PowerShell
-   - Select "Run as Administrator"
-
-3. **Navigate to the folder** where you saved `install.ps1`:
-   ```powershell
-   cd ~\Downloads
-   ```
-
-4. **Run the installer**:
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File install.ps1
-   ```
-
-5. **Wait 10-20 minutes** for installation to complete
-
-6. **Find desktop shortcuts**:
-   - "Cruise Logs - Main Form" - Click to start
-   - "Cruise Logs - Launcher" - Alternative launcher
-
-### What Gets Installed
-
-- Repository cloned to: `C:\Cruise_Logs`
-- Conda environment: `cruise_logs` (Python 3.11)
-- Required packages: streamlit, pandas, sqlite, etc.
-- Desktop shortcuts for easy launching
+- [Installation](#installation)
+- [GitHub Authentication](#github-authentication)
+- [Troubleshooting](#troubleshooting)
+- [Daily Usage](#daily-usage)
+- [Git Operations](#git-operations)
+- [Updating](#updating-the-installation)
 
 ---
 
@@ -95,7 +46,7 @@ The repository uses **HTTPS with 2FA** (Google Authenticator) for authentication
 To avoid entering credentials repeatedly:
 
 ```powershell
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 git config credential.helper store
 ```
 
@@ -140,21 +91,21 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 #### Error: "file not found"
 **Solution:** Make sure you're in the correct directory:
 ```powershell
-cd ~\Downloads  # or wherever you saved install.ps1
-dir install.ps1  # verify it exists
+cd ~\Downloads  # or wherever you saved install_user.ps1
+dir install_user.ps1  # verify it exists
 ```
 
 #### Error: "Anaconda/Miniconda not found"
 **Solution:** Install Anaconda first:
 1. Download from: https://www.anaconda.com/download/
 2. Run installer and check "Add Anaconda to PATH"
-3. Run `install.ps1` again
+3. Run the installer again
 
 #### Error: "Git is not installed"
 **Solution:** Install Git:
 1. Download from: https://git-scm.com/download/win
 2. Run installer and select "Add Git to PATH"
-3. Run `install.ps1` again
+3. Run the installer again
 
 #### Installation hangs
 **Symptoms:** No new text for 10+ minutes
@@ -210,7 +161,7 @@ Get-Process -Name python | Stop-Process -Force
 **Solution:**
 ```powershell
 conda activate cruise_logs
-pip install -r C:\Cruise_Logs\requirements.txt
+pip install -r "$HOME\Cruise_Logs\requirements.txt"
 ```
 
 ---
@@ -226,7 +177,7 @@ Double-click **"Cruise Logs - Main Form"** on your desktop
 ```powershell
 # Open PowerShell (doesn't need to be Administrator)
 conda activate cruise_logs
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 streamlit run cruise_form.py
 ```
 
@@ -234,7 +185,7 @@ streamlit run cruise_form.py
 
 ```powershell
 conda activate cruise_logs
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 python launcher.py
 ```
 
@@ -249,14 +200,14 @@ Press `Ctrl+C` in the PowerShell window, or just close the window.
 ### Pull Latest Changes
 
 ```powershell
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 git pull origin main
 ```
 
 ### Push Your Changes
 
 ```powershell
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 git add Cruise_Logs.db
 git commit -m "Updated cruise logs - [your description]"
 git push origin main
@@ -265,14 +216,14 @@ git push origin main
 ### Check Status
 
 ```powershell
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 git status
 ```
 
 ### View Remote URL
 
 ```powershell
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 git remote get-url origin
 # Should show: https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs.git
 ```
@@ -284,7 +235,7 @@ git remote get-url origin
 ### Update Code
 
 ```powershell
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 git pull origin main
 ```
 
@@ -292,7 +243,7 @@ git pull origin main
 
 ```powershell
 conda activate cruise_logs
-pip install --upgrade -r C:\Cruise_Logs\requirements.txt
+pip install --upgrade -r "$HOME\Cruise_Logs\requirements.txt"
 ```
 
 ### Update Conda Environment
@@ -307,17 +258,13 @@ conda update --all -n cruise_logs
 
 ### Custom Install Location
 
-You can specify a different installation directory:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1 -InstallPath "D:\MyApps\Cruise_Logs"
-```
+By default, the installer uses `C:\Users\YourName\Cruise_Logs`. The installation location is optimized for user access without admin privileges.
 
 ### Environment Variables
 
 If you need to modify paths, edit these files:
-- `C:\Cruise_Logs\config.py` - Database paths
-- Conda environment: `C:\ProgramData\Anaconda3\envs\cruise_logs`
+- `$HOME\Cruise_Logs\config.py` - Database paths
+- Conda environment: Managed by Anaconda
 
 ---
 
@@ -340,10 +287,6 @@ If you need to modify paths, edit these files:
 - **User Instructions:** `INSTALL_INSTRUCTIONS_USER.txt`
 - **Installation Overview:** `USER_INSTALLATION_FILES.md`
 
-### For Field Laptops
-- **Installation Command Reference:** `INSTALL_COMMAND.txt`
-- **Field Deployment Guide:** `FIELD_DEPLOYMENT_GUIDE.md` (if available)
-
 ### General
 - **Main README:** `../README.md`
 - **GitHub Issues:** https://github.com/NOAA-PMEL/GTMBA-Cruise_Logs/issues
@@ -357,19 +300,19 @@ If you need to modify paths, edit these files:
 conda activate cruise_logs
 
 # Start main form
-streamlit run C:\Cruise_Logs\cruise_form.py
+streamlit run "$HOME\Cruise_Logs\cruise_form.py"
 
 # Start launcher
-python C:\Cruise_Logs\launcher.py
+python "$HOME\Cruise_Logs\launcher.py"
 
 # Check Git status
-cd C:\Cruise_Logs && git status
+cd "$HOME\Cruise_Logs" && git status
 
 # Pull latest changes
-cd C:\Cruise_Logs && git pull
+cd "$HOME\Cruise_Logs" && git pull
 
 # Push your changes
-cd C:\Cruise_Logs
+cd "$HOME\Cruise_Logs"
 git add Cruise_Logs.db
 git commit -m "Update"
 git push

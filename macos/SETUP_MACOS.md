@@ -580,7 +580,7 @@ git pull
 
 - **Main README:** `../README.md`
 - **Inventory Docs:** `../README_inventories.md`
-- **Windows Setup:** `../windows/SETUP_WINDOWS.md`
+- **Windows Setup:** `../windows/QUICKSTART_USER.md`
 - **Streamlit Docs:** https://docs.streamlit.io/
 - **SQLite Docs:** https://www.sqlite.org/docs.html
 
