@@ -6,15 +6,34 @@ Import NYLON LENGTHS_MostRecent.xls into the Cruise_Logs.db database as nylon_in
 import pandas as pd
 import sqlite3
 import sys
+import tkinter as tk
+from tkinter import filedialog
 
 def import_nylon_inventory():
     """Import the nylon lengths Excel file into the database"""
 
+    # Open file chooser dialog
+    print("Please select the Nylon Lengths Excel file...")
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    root.attributes('-topmost', True)  # Bring dialog to front
+    
+    file_path = filedialog.askopenfilename(
+        title="Select Nylon Lengths Excel File",
+        filetypes=[("Excel files", "*.xls *.xlsx"), ("All files", "*.*")],
+        initialfile="NYLON LENGTHS_MostRecent.xls"
+    )
+    root.destroy()
+    
+    if not file_path:
+        print("No file selected. Exiting...")
+        sys.exit(0)
+    
     # Read the Excel file
-    print("Reading NYLON LENGTHS_MostRecent.xls...")
+    print(f"Reading {file_path}...")
     try:
         # Read without header and assign column names
-        df = pd.read_excel('NYLON LENGTHS_MostRecent.xls', header=None)
+        df = pd.read_excel(file_path, header=None)
 
         # Assign meaningful column names based on the data structure
         df.columns = ['Spool_ID', 'Month', 'Year', 'Length_m', 'Flag', 'Lot_Number']

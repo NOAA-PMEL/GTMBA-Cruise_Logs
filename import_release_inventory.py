@@ -6,14 +6,33 @@ Import Equipment.xls into the Cruise_Logs.db database as release_inventory table
 import pandas as pd
 import sqlite3
 import sys
+import tkinter as tk
+from tkinter import filedialog
 
 def import_release_inventory():
     """Import the equipment Excel file into the database"""
 
+    # Open file chooser dialog
+    print("Please select the Equipment Excel file...")
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    root.attributes('-topmost', True)  # Bring dialog to front
+    
+    file_path = filedialog.askopenfilename(
+        title="Select Equipment Excel File",
+        filetypes=[("Excel files", "*.xls *.xlsx"), ("All files", "*.*")],
+        initialfile="Equipment.xls"
+    )
+    root.destroy()
+    
+    if not file_path:
+        print("No file selected. Exiting...")
+        sys.exit(0)
+    
     # Read the Excel file
-    print("Reading Equipment.xls...")
+    print(f"Reading {file_path}...")
     try:
-        df = pd.read_excel('Equipment.xls')
+        df = pd.read_excel(file_path)
         print(f"Successfully read {len(df)} rows and {len(df.columns)} columns")
     except Exception as e:
         print(f"Error reading Excel file: {e}")
